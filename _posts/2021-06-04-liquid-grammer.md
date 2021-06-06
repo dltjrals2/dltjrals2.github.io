@@ -62,13 +62,4 @@ Output : Hello Adam!
 여기서는, {% raw %}product.title{% endraw %} 내용에 Pack이 있으면 [내용] 실행  
 
 ### 3. Whitespace control  
->
-
-
-
-`{% raw %}{% endraw %}`
-`{% raw %}{% endraw %}`
-`{% raw %}{% endraw %}`
-`{% raw %}{% endraw %}`
-`{% raw %}{% endraw %}`
-`{% raw %}{% endraw %}`
+> To be Continue
