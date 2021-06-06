@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: {{ '/sitemap.xml' | relative_url | prepend: site.url }}
+Sitemap: http://dltjrals2.github.io/sitemap.xml
