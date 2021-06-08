@@ -74,8 +74,10 @@ body {
 }
 
 .page__title {
+  font-family: "Cafe24Oneprettynight";
   margin-top: 0;
-  line-height: 1;
+  line-height: 1.2;
+  color: #ffd966;
 
   & + .page__meta {
     margin-top: -0.5em;
@@ -326,10 +328,21 @@ body {
   color: #FFBF00;
 }
 
-.page__taxonomy {
+.page__taxonomy-item-category {
+  margin-right: 5px;
+  margin-bottom: 8px;
+  padding: 3px 8px;
+  text-decoration: none;
+  border: 1px solid #373C3F;
+  border-radius: 4px;
+  background-color: #6d7275;
+  font-family: "Coming Soon",Georgia,Times,serif;
+  color: #ffc005;
+}
 
+.page__taxonomy {
   /* custom tag color */
-  color: #FFAA28;
+  margin-top: -10px;
   .sep {
     display: none;
   }

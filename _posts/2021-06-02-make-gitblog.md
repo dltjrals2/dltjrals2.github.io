@@ -9,6 +9,8 @@ tags:
 
 toc:  true
 toc_sticky: true
+show_date: true
+read_time: false
 
 date: 2021-06-02
 last_modified_at: 2021-06-03
