@@ -12,6 +12,9 @@ toc_sticky: true
 
 date: 2021-06-04
 last_modified_at: 2021-06-04
+sitemap :
+  changefreq : daily
+  priority : 1.0
 ---
 
 Github Blog를 만들면서 무작정 다른 사람이 한 것을 따라하는 것보다는 왜 바꾼지를 알아가면서 추후에, 내가 더 변경하거나 추가할 사항이 있을 경우 스스로 수정이 필요하니까 <span style="color:blue">**Liquid문법**</span>을 먼저 익히기로 했다!  

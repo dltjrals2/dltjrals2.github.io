@@ -12,6 +12,9 @@ toc_sticky: true
 
 date: 2021-06-02
 last_modified_at: 2021-06-03
+sitemap :
+  changefreq : daily
+  priority : 1.0
 ---
 
 # 1. Github에서 새로운 Repository를 생성한다.  

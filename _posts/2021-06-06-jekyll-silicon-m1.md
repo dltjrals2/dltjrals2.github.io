@@ -12,6 +12,9 @@ toc_sticky: true
 
 date: 2021-06-06
 last_modified_at: 2021-06-07
+sitemap :
+  changefreq : daily
+  priority : 1.0
 ---
 전에 사용하던 Window 기반 노트북이 화면도 안들어오고, 비행기 이륙소리 때문에 노트북을 바꾸게 되었다.  
 

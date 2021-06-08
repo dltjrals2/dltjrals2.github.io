@@ -12,6 +12,9 @@ toc_sticky: true
 
 date: 2021-06-03
 last_modified_at: 2021-06-03
+sitemap :
+  changefreq : daily
+  priority : 1.0
 ---
 
 ## 1. cmd를 동작시켜 내 Local Repositor로 이동해 chcp명령어를 입력한다.  
