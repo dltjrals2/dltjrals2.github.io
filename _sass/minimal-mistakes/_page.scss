@@ -314,7 +314,22 @@ body {
    Page taxonomy
    ========================================================================== */
 
+.item-tag {
+  margin-right: 5px;
+  margin-bottom: 8px;
+  padding: 3px 8px;
+  text-decoration: none;
+  border: 1px solid #373C3F;
+  border-radius: 4px;
+  background-color: #4D5357;
+  font-family: "Coming Soon",Georgia,Times,serif;
+  color: #FFBF00;
+}
+
 .page__taxonomy {
+
+  /* custom tag color */
+  color: #FFAA28;
   .sep {
     display: none;
   }
