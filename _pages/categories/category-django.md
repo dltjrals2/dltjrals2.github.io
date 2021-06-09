@@ -1,11 +1,10 @@
 ---
-title: "[프로그래머스] 파이썬 문제 풀이"
+title: "[WEB Framework] Django"
 layout: archive
-permalink: categories/programmers
+permalink: categories/django
 author_profile: true
 sidebar_main: true
 ---
 
-
-{% assign posts = site.categories.Programmers %}
+{% assign posts = site.categories.Django %}
 {% for post in posts %} {% include archive-single2.html type=page.entries_layout %} {% endfor %}
