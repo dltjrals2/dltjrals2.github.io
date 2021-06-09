@@ -3,7 +3,7 @@ main:
   - title: "Home"
     url: https://dltjrals2.github.io/
   - title: "Category"
-    url: https://dltjrals2.github.io/categories
+    url: /categories/
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
   # - title: "Sample Posts"
