@@ -16,9 +16,13 @@
             <i class="fas fa-fw fa-calendar-alt" aria-hidden="true"> </i>{{ post.date | date: " %Y.%m.%d" }}
         </small>
         <div>
-            <span>
-              <a style="font-size: 20px;" href="{{ post.url }}">{{post.title}}</a>
-            </span>
+          <span>
+            <a style="font-size: 20px;" href="{{ post.url }}">{{post.title}}</a>
+          </span>
+        </div>
+        <br>
+        <div>
+          {% include post__taxonomy.html %}
         </div>
         <br>
     </article>

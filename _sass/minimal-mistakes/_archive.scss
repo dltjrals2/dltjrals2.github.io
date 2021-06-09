@@ -32,11 +32,12 @@
 }
 
 .archive__subtitle {
-  margin: 1.414em 0 0.5em;
+  margin: 0.8em 0 0;
   padding-bottom: 0.5em;
-  font-size: $type-size-5;
-  color: $muted-text-color;
-  border-bottom: 1px solid $border-color;
+  font-size: 1.563em;
+  color: #ffd966;
+  border-bottom: 1px solid #5f6365;
+  font-family: "Coming Soon",Georgia,Times,serif;
 
   + .list__item .archive__item-title {
     margin-top: 0.5em;

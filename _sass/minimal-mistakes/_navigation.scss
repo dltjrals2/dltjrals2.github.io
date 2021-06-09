@@ -470,6 +470,9 @@
 
   a {
     color: inherit;
+    font-size: 1.563em;
+    font-family: "Cafe24Oneprettynight";
+    color: #fff2cc;
   }
 
   .active {
@@ -519,12 +522,10 @@
   display: block;
   margin: 0.5rem 0;
   padding: 0.25rem 0;
-  font-family: $SEBANG_Gothic_Bold;
-  // font-size: $type-size-6;
-  font-size: $type-size-8;
-  font-weight: bold;
-  text-transform: uppercase;
-  border-bottom: 1px solid $border-color;
+  font-size: 1.563em;
+  font-family: "Coming Soon",Georgia,Times,serif;
+  color: #ffd559;
+  border-bottom: 1px solid #5f6365;
 }
 
 /*
