@@ -1,6 +1,5 @@
 ---
 title: "[Github 블로그] jekyll 동작시키기"
-excerpt: "에디터 : Atom"
 
 categories:
   - Gitblog

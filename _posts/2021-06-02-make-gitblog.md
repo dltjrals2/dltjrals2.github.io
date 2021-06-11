@@ -1,6 +1,5 @@
 ---
 title: "[Github 블로그] Github 블로그를 만들자."
-excerpt: "에디터 : Atom"
 
 categories:
   - Gitblog

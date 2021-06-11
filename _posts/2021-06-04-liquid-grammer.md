@@ -1,6 +1,5 @@
 ---
 title: "[Github 블로그] Liquid 문법 정리"
-excerpt: "에디터 : Atom"
 
 categories:
   - Gitblog

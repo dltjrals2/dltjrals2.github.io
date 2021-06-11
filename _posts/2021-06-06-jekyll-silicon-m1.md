@@ -1,6 +1,5 @@
 ---
 title: "[Github 블로그] Mac OS m1 jekyll 설정"
-excerpt: "에디터 : Atom"
 
 categories:
   - Gitblog

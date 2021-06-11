@@ -168,8 +168,9 @@ figcaption > code,
 td > code {
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
-  font-size: 0.8em;
+  font-size: 1em;
   background: $code-background-color;
+  color: #FFBF00;
   border-radius: $border-radius;
 
   &:before,
