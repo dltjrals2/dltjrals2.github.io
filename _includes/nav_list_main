@@ -30,21 +30,6 @@
               {% endif %}
             {% endfor %}
           </ul>
-          <ul>
-            {% for category in site.categories %}
-              {% if category[0] == "Programmers" %}
-                <li><a href="/categories/programmers" class="">프로그래머스 ({{category[1].size}})</a></li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-        <span class="nav__sub-title">Django</span>
-          <ul>
-            {% for category in site.categories %}
-              {% if category[0] == "Django" %}
-                <li><a href="/category/django" class="">Django ({{category[1].size}})</a></li>
-              {% endif %}
-            {% endfor %}
-          </ul>
       </li>
       <!-- Hits를 이용해서 방문자수 표시하기 -->
       <li>
