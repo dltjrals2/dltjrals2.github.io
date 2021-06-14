@@ -137,7 +137,7 @@ result += (m - count) * second # 두 번째로 큰 수 더하기
 
 print(result) # 최종 답안 출력
 ```
-
+<br>
 기출 : 2019 국가 교육기관 코딩 테스트  
 
 
