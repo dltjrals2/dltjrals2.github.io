@@ -41,8 +41,33 @@ sitemap :
 **<u>출력 예시</u>**  
 15  
 
-> 나의 풀이  
+> 나의 풀이 : 틀려서 추후에 수정 필요  
 
+```python
+n, m = map(int, input().split())
+lenArr = list(map(int, input().split()))
+
+# 10 15 17 19
+def binary_search(array, target, start, end):
+    while start <= end:
+        count = 0
+        mid = (start + end) // 2
+
+        for x in lenArr:
+            if mid < x:
+                count += (x - mid)
+
+        if target == count:
+            return mid
+        # 떡의 양이 부족한 경우 : 더 많이 잘라야 한다. 왼쪽으로!
+        elif target > count:
+            end = mid - 1
+        else:
+            start = mid + 1
+    return None
+
+print(binary_search(lenArr, m, 0, max(lenArr)))
+```
 
 > 문제 해설  
 
@@ -68,6 +93,37 @@ sitemap :
 ![image](https://user-images.githubusercontent.com/37467408/122526677-865d6f80-d055-11eb-8fdc-99e803b443b9.PNG)  
 
 > 답안 예시  
+
+```python
+# 떡의 개수(N)와 요청한 떡의 길이(M)을 입력받기
+n, m = list(map(int, input().split(' ')))
+# 각 떡의 개별 높이 정보를 입력받기
+array = list(map(int, input().split()))
+
+# 이진 탐색을 위한 시작점과 끝점 설정
+start = 0
+end = max(array)
+
+# 이진 탐색 수행(반복적)
+result = 0
+while(start <= end):
+    total = 0
+    mid = (start + end) // 2
+    for x in array:
+        # 잘랐을 때의 떡의 양 계산
+        if x > mid:
+            total += x - mid
+    # 떡의 양이 부족한 경우 더 많이 자르기(왼쪽 부분 탐색)
+    if total < m:
+        end = mid - 1
+    # 떡의 양이 충분한 경우 덜 자르기(오른쪽 부분 탐색)
+    else:
+        result = mid # 최대한 덜 잘랐을 때가 정답이므로, 여기에서 result 기록
+        start = mid + 1
+
+# 정답 출력
+print(result)
+```
 
 
 ---
