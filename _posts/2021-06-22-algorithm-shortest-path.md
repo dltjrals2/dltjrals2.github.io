@@ -4,15 +4,16 @@ title: "[Shortest Path] 가장 빠른 길 찾기"
 categories:
   - Algorithm
 tags:
-  - [Algorithm, Python, Shortest Path]
+  - [Algorithm, Python, Shortest Path, Dijkstra]
 
 toc:  true
 toc_sticky: true
 show_date: true
 read_time: false
+use_math: true
 
 date: 2021-06-22
-last_modified_at: 2021-06-22
+last_modified_at: 2021-06-23
 sitemap :
   changefreq : daily
   priority : 1.0
@@ -238,11 +239,175 @@ else:
 
 ![image](https://user-images.githubusercontent.com/37467408/122885399-03505800-d37a-11eb-9366-48b71e4afbed.PNG)  
 
-개선된 다익스트라 알고리즘의 코드는 다음과 같다.  
+개선된 다익스트라 알고리즘의 코드는 다음과 같다. 앞의 코드외 비교하자면 get_smallest_node()라는 함수를 작성할 필요가 없다는 특징이 있다. `최단 거리가 가장 짧은 노드를 선택하는 과정을 다익스트라 최단 경로 함수 안에서 우선순위 큐를 이용하는 방식으로 대체`할 수 있기 때문이다.  
+
+```python
+import heapq
+import sys
+input = sys.stdin.readline
+INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
+
+# 노드의 개수, 간선의 개수를 입력받기
+n, m = map(int, input().split())
+# 시작 노드를 입력 받기
+start = int(input())
+# 각 노드에 연결되어 있는 노드에 대한 정보를 담는 리스트를 만들기
+graph = [[] for i in range(n + 1)]
+# 최단 거리 테이블을 모두 무한으로 초기화
+distance = [INF] * (n + 1)
+
+# 모든 간선 정보를 입력받기
+for _ in range(m):
+  a, b, c = map(int, input().split())
+  # a번 노드에서 b번 노드로 가는 비용이 c라는 의미
+  graph[a].append((b, c))
+
+def dijkstra(start):
+  q = []
+  # 시작 노드로 가기 위한 최단 경로는 0으로 설정하여, 큐에 삽입
+  heapq.heappush(q, (0, start))
+  distance[start] = 0
+  while q: # 큐가 비어있지 않다면
+    # 가장 최단 거리가 짧은 노드에 대한 정보 꺼내기
+    dist, now = heapq.heappop(q)
+    # 현재 노드가 이미 처리된 적이 있는 노드라면 무시
+    if distance[now] < dist:
+      continue
+    # 현재 노드와 연결된 다른 인접한 노드들을 확인
+    for i in graph[now]:
+      cost = dist + i[1]
+      # 현재 노드를 거쳐서, 다른 노드로 이동하는 거리가 더 짧은 경우
+      if cost < distance[i[0]]:
+        distance[i[0]] = cost
+        heapq.heappush(q, (cost, i[0]))
+
+# 다익스트라 알고리즘 수행
+dijkstra(start)
+
+# 모든 노드로 가기 위한 최단 거리를 출력
+for i in range(1, n + 1):
+  # 도달할 수 없는 경우, 무한이라고 출력
+  if distance[i] == INF:
+    print("INFINITY")
+  # 도달할 수 있는 경우 거리를 출력
+else:
+  print(distance[i])
+```  
+
+**<u>개선된 다익스트라 알고리즘의 시간 복잡도</u>**  
+
+시간 복잡도가 O(ElogV)로 훨씬 빠르다. 개선하기 전 다익스트라 알고리즘보다 빠른 이유는 한 번 처리된 노드는 더 이상 처리하지 않기 때문이다. 다시 말해 큐에서 노드를 하나씩 꺼내 검사하는 반복문은 노드의 개수 V 이상의 횟수로는 반복되지 않는다. 또한, V번 반복될 때마다 각각 자신과 연결된 간선들을 모두 확인한다. 따라서, '현재 우선순위 큐에서 꺼낸 노드와 연결된 다른 노드들을 확인'하는 총횟수는 총 최대 간선의 개수(E)만큼 연산이 수행될 수 있다.  
 
 
+> 플로이드 워셜 알고리즘  
 
+`플로이드 워셜 알고리즘(Floyd-Warshall Algorithm)`은 '모든 지점에서 다른 모든 지점까지의 최단 경로를 모두 구해야 하는 경우'에 사용할 수 있는 알고리즘이다. 다익스트라 알고리즘과 다른 점은 매번 방문하지 않은 노드 중에서 최단 거리를 갖는 노드를 찾을 필요가 없다는 점이 다르다. 노드의 개수가 N개일 때 알고리즘상으로 N번의 단계를 수행하며, 단계마다 O(N^2)의 연산을 통해 '현재 노드를 거쳐 가는' 모든 경로를 고려한다. 따라서 플로이드 워셜 알고리즘의 총시간 복잡도는 O(N^3)이다.  
+다익스트라 알고리즘에서는 출발 노드가 1개이므로 다른 모든 노드까지의 최단 거리를 저장하기 위해 1차원 리스트를 이용했지만 플로이드 워셜 알고리즘은 2차원 리스트에 '최단 거리'정보를 저장한다는 특징이 있다. 모든 노드에 대하여 다른 모든 노드로 가는 최단 거리 정보를 담아야 하기 때문이다. 즉, 2차원 리스트를 처리해야 하므로 N번의 단계에서 매번 O(N^2)의 시간이 소요된다.  
+또한, 다익스트라 알고리즘은 그리디 알고리즘인데 플로이드 워셜 알고리즘은 다이나믹 프로그래밍이라는 특징이 있다.  
+다음 그림을 통해 구체적인 예시를 확인해보도록 하자.  
 
+![image](https://user-images.githubusercontent.com/37467408/123012539-5ddec800-d3fd-11eb-8e20-3144c4b8f87d.PNG)  
+
+**<u>step 0</u>**  
+
+![image](https://user-images.githubusercontent.com/37467408/123012757-cf1e7b00-d3fd-11eb-8e42-424ae3e8cece.PNG)  
+
+**<u>step 1</u>** [step 1]에서는 단순히 1번 노드를 거쳐 가는 경우를 고려한다. 이때는 정확히 다음과 같이 6 = 3P2 가지 경우에 대해서만 고민하면 된다. 2차원 테이블에서는 다른 색으로 칠해 놓았는데, 계산해야 할 값들은 구체적으로 다음과 같다.  
+- $D_23$ = min($D_23$, $D_21$ + $D_13$)  
+- $D_24$ = min($D_24$, $D_21$ + $D_14$)  
+- $D_32$ = min($D_32$, $D_31$ + $D_12$)
+- $D_34$ = min($D_34$, $D_31$ + $D_14$)
+- $D_42$ = min($D_42$, $D_41$ + $D_12$)
+- $D_43$ = min($D_43$, $D_41$ + $D_13$)  
+이 6가지 경우만 하나씩 확인하며 값을 계산하여 갱신한다. 예를 들어 $D_23$ = min($D_23$, $D_21$ + $D_13$)은 '기존의 2번 노드에서 3번 노드로 가는 비용'보다 '2번 노드에서 1번 노드를 거쳐 3번 노드로 가는 비용'이 더 적다면, 그것으로 갱신해주겠다는 의미를 가진다. 그래서 $D_23$의 값은 $D_23$과 ($D_21$ + $D_13$) 중에서 더 작은 값으로 교체된다. 다시 말해 1을 거쳐 갈 때가 더 빠른 경우가 존재한다면 빠른 경우로 최단 거리를 갱신해주는 식이다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123013897-0d1c9e80-d400-11eb-8682-c1642ba076b0.PNG)  
+
+이렇게 6가지 식을 모두 계산해서 값을 갱신하면 테이블이 다음과 같이 바뀐다. 예를 들어 $D_24$는 원래 '무한'의 값을 가졌는데, $D_21$ + $D_14$ = 9와 비교해서 9로 갱신된다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123014004-448b4b00-d400-11eb-9b5c-f420ba6c2126.PNG)  
+
+**<u>step 2</u>** 마찬가지로 알고리즘을 [step 2]에 대해서도 수행할 수 있다. 현재 테이블의 상태는 다음과 같다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123014048-5c62cf00-d400-11eb-8d25-7aac1ba43e97.PNG)  
+
+이번에는 2번 노드를 거쳐 가는 경우를 계산해야 하므로 2번 노드를 제외한 1번, 3번, 4번 노드에서 2개의 노드를 뽑는 경우를 고려한다. 정확히 (1, 3), (1, 4), (3, 1), (3, 4), (4, 1), (4, 3)으로 6가지 경우가 있다. 각각의 위치를 테이블 상에서 하늘색으로 표시하면 다음과 같다. 이 6가지 값만 생성하면 된다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123016781-4eb04800-d406-11eb-828b-9db210e864ac.PNG)  
+
+마찬가지로 하늘색 부분에 대해서만 고려하면, 갱신 결과는 다음과 같다. 예를 들어 $D_13$은 원래 '무한'의 값을 가졌는데, $D_12$ + $D_23$ = 11과 비교해서 11로 갱신된다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123016861-7b645f80-d406-11eb-9222-98f97adeb6b6.PNG)  
+
+**<u>step 3</u>** 마찬가지로 3번 노드에 대해서 동일한 과정을 반복하면 된다. 현재 테이블은 다음과 같은 값을 가지고 있다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123016897-8fa85c80-d406-11eb-83ca-1c3fd53bed89.PNG)  
+
+3번을 제외하고 1번, 2번, 4번 중에서 두 쌍을 선택하는 경우는 (1, 2), (1, 4), (2, 1), (2, 4), (4, 1), (4, 2)로 6가지 경우가 있다. 이 6가지 경우를 색칠하면 다음과 같다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123016984-b9618380-d406-11eb-829d-9063f97ec9b1.PNG)  
+
+마찬가지로 [step 3]에 대해서도 점화식에 맞게 테이블을 갱신하여, 반영된 결과를 확인하면 다음과 같다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123017060-d302cb00-d406-11eb-82b3-9dedc8b98f52.PNG)  
+
+**<u>step 4</u>** 마찬가지로 4번 노드에 대해서도 처리할 수 있다. 현재 테이블의 상태는 다음과 같다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123017106-e4e46e00-d406-11eb-9e1e-d9cf6f293503.PNG)  
+
+4번 노드를 거쳐 가는 경우를 고라하면 다음과 같이 6가지 경우를 테이블에 색칠해두었다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123017135-f6c61100-d406-11eb-8047-b6ff626d58c0.PNG)  
+
+갱신된 결과는 다음과 같다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123017171-047b9680-d407-11eb-8503-3c82192ca3fa.PNG)  
+
+**<u>최종 결과</u>**  
+노드의 개수가 4개이므로 총 [step 4]까지 알고리즘을 수행하였다. 그래서 [step 4]가 모두 수행되었을 때 최종적으로 테이블의 형태는 다음과 같다.  
+
+![image](https://user-images.githubusercontent.com/37467408/123017274-368cf880-d407-11eb-92c1-83f295c49bad.PNG)  
+
+소스코드는 다음과 같다.  
+
+```python
+INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
+
+# 노드의 개수 및 간선의 개수를 입력받기
+n = int(input())
+m = int(input())
+
+# 2차원 리스트(그래프 표현)을 만들고, 모든 값을 무한으로 초기화
+graph = [[INF] * (n + 1) for _ in range(n + 1)]
+
+# 자기 자신에서 자기 자신으로 가는 비용은 0으로 초기화
+for a in range(1, n + 1):
+  for b in range(1, n + 1):
+    if a == b:
+      graph[a][b] = 0
+
+# 각 간선에 대한 정보를 입력받아, 그 값으로 초기화
+for _ in range(m):
+  # A에서 B로 가는 비용은 C라고 설정
+  a, b, c = map(int, input().split())
+  graph[a][b] = c
+
+# 점화식에 따라 플로이드 워셜 알고리즘을 수행
+for k in range(1, n + 1):
+  for a in range(1, n + 1):
+    for b in range(1, n + 1):
+      graph[a][b] = min(graph[a][b], graph[a][k] + graph[k][b])
+
+# 수행된 결과를 출력
+for a in range(1, n + 1):
+  for b in range(1, n + 1):
+    # 도달할 수 없는 경우, 무한이라고 출력
+    if graph[a][b] = INF:
+      print("INFINITY", end = ' ')
+    else:
+      print(graph[a][b], end = ' ')
+  print()
+```
 
 ---
 **🐢 현재 공부하고 있는 `이것이 취업을 위한 코딩 테스트다 with 파이썬 - 나동빈 저자` 의 책을 학습하며 기록 및 정리를 하기위한 내용들입니다. 🐢**
