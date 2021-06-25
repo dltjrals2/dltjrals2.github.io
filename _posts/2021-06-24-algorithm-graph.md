@@ -4,7 +4,7 @@ title: "[Graph] 그래프 이론1"
 categories:
   - Algorithm
 tags:
-  - [Algorithm, Python, Graph]
+  - [Algorithm, Python, Graph, Disjoint Sets]
 
 toc:  true
 toc_sticky: true
@@ -218,7 +218,7 @@ for i in range(1, v + 1):
 
 > 서로소 집합 알고리즘의 시간 복잡도  
 
-경로 압축 방법을 이용했을 경우, 노드의 개수가 V이고, 최대 V - 1개의 union 연산과 M개의 find 연산이 가능할 때 경로 압축 방법을 적용한 시간 복잡도는 O(V + M(1 + log_2-M/V V))라는 것이 알려져 있다.  
+경로 압축 방법을 이용했을 경우, 노드의 개수가 V이고, 최대 V - 1개의 union 연산과 M개의 find 연산이 가능할 때 경로 압축 방법을 적용한 시간 복잡도는 O(V + M(1 + logM/V V))라는 것이 알려져 있다.  
 
 > 서로소 집합을 활용한 사이클 판별  
 
