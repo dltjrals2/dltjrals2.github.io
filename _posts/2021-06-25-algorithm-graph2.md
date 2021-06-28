@@ -13,7 +13,7 @@ read_time: false
 use_math: true
 
 date: 2021-06-25
-last_modified_at: 2021-06-25
+last_modified_at: 2021-06-28
 sitemap :
   changefreq : daily
   priority : 1.0
@@ -98,10 +98,65 @@ sitemap :
 
 ![image](https://user-images.githubusercontent.com/37467408/123374941-df338780-d5c2-11eb-9ee6-2dd1b2a73f33.PNG)  
 
-**<u>step 9</u>** 그다음으로 비용이 가장 작은 간선 (1, 5)를 선택한다. 선택된 노드 1과 노드 5의 루트 노드를 확인한다. 다만, 노드 1과 노드 5의
+**<u>step 9</u>** 그다음으로 비용이 가장 작은 간선 (1, 5)를 선택한다. 선택된 노드 1과 노드 5의 루트 노드를 확인한다. 다만, 노드 1과 노드 5의 루트 노드를 확인한다. 다만, 노드 1과 노드 5의 루트가 이미 동일한 집합에 포함되어 있으므로 union 함수를 호출하지 않는다.  
 
+![image](https://user-images.githubusercontent.com/37467408/123565394-acbea000-d7f7-11eb-8208-ff4c2254a7cd.PNG)  
 
+최소 신장 트리에 있는 간선의 비용만 모두 더하면, 그 값이 최종 비용에 해당한다.  
+최소 신장 트리를 만드는데 필요한 비용을 계산하는 크루스칼 알고리즘 소스코드는 다음과 같다.  
 
+```python
+# 특정 원소가 속한 집합을 찾기
+def find_parent(parent, x):
+  # 루트 노드가 아니라면, 루트 노드를 찾을 때까지 재귀적으로 호출
+  if parent[x] != x:
+    parent[x] = find_parent(parent, parent[x])
+  return parent[x]
+
+# 두 원소가 속한 집합을 합치기
+def union_parent(parent, a, b):
+  a = find_parent(parent, a)
+  b = find_parent(parent, b)
+  if a < b:
+    parent[b] = a
+  else:
+    parent[a] = b
+
+# 노드의 개수와 간선(union 연산)의 개수 입력받기
+v, e = map(int, input().split())
+parent = [0] * (v + 1) # 부모 테이블 초기화
+
+# 모든 간선을 담을 리스트와 최종 비용을 담을 변수
+edges = []
+result = 0
+
+# 부모 테이블상에서, 부모를 자기 자신으로 초기화
+for i in range(1, v + 1):
+  parent[i] = i
+
+# 모든 간선에 대한 정보를 입력받기
+for _ in range(e):
+  a, b, cost = map(int, input().split())
+  # 비용순으로 정렬하기 위해서 튜플의 첫 번째 원소를 비용으로 설정
+  edges.append((cost, a, b))
+
+# 간선을 비용순으로 정렬
+edges.sort()
+
+# 간선을 하나씩 확인하며
+for edge in edges:
+  cost, a, b = edge
+  # 사이클이 발생하지 않는 경우에만 집합에 포함
+  if find_parent(parent, a) != find_parent(parent, b):
+    union_parent(parent, a, b)
+    result += cost
+
+return result
+```  
+
+> 크루스칼 알고리즘의 시간 복잡도  
+
+크루스칼 알고리즘은 간선의 개수가 E개일 때, O(ElogE)의 시간 복잡도를 가진다. 시간이 가장 오래 걸리는 부분이 간선을 정렬하는 작업이며, E개의 데이터를 정렬했을 때의 시간 복잡도는 O(ElogE)이기 때문이다.  
 
 ---
 **🐢 현재 공부하고 있는 `이것이 취업을 위한 코딩 테스트다 with 파이썬 - 나동빈 저자` 의 책을 학습하며 기록 및 정리를 하기위한 내용들입니다. 🐢**
