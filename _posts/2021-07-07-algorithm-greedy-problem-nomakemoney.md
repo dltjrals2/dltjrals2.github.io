@@ -4,7 +4,7 @@ title: "[Greedy] 만들 수 없는 금액"
 categories:
   - Algorithm
 tags:
-  - [Algorithm, Python, Greedy]
+  - [Algorithm, Python, Greedy, 풀이실패]
 
 toc:  true
 toc_sticky: true

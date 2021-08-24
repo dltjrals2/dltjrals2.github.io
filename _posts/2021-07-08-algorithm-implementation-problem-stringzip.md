@@ -4,7 +4,7 @@ title: "[Implementation] 문자열 압축"
 categories:
   - Algorithm
 tags:
-  - [Algorithm, Python, Implementation]
+  - [Algorithm, Python, Implementation, 풀이실패]
 
 toc:  true
 toc_sticky: true

@@ -4,7 +4,7 @@ title: "[Implementation] 뱀"
 categories:
   - Algorithm
 tags:
-  - [Algorithm, Python, Implementation, 복습필요]
+  - [Algorithm, Python, Implementation, 풀이실패]
 
 toc:  true
 toc_sticky: true

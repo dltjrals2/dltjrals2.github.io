@@ -4,7 +4,7 @@ title: "[Greedy] 무지의 먹방 라이브"
 categories:
   - Algorithm
 tags:
-  - [Algorithm, Python, Greedy]
+  - [Algorithm, Python, Greedy, 풀이실패]
 
 toc:  true
 toc_sticky: true
