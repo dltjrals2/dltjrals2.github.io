@@ -24,6 +24,9 @@ sidebar_main: true
         {% if category[0] == "Algorithm" %}
           <li><a href="/categories/algorithm" class="">Algorithm ({{category[1].size}})</a></li>
         {% endif %}
+        {% if category[0] == "AlgorithmRe" %}
+          <li><a href="/categories/algorithmRe" class="">Algorithm 복습 ({{category[1].size}})</a></li>
+        {% endif %}
       {% endfor %}
     </ul>
   </ul>
