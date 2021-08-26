@@ -1,5 +1,5 @@
 ---
-title: "[Implementation] 기둥과 보 설치"
+title: "[Algorithm Review] Test"
 
 categories:
   - AlgorithmRe
