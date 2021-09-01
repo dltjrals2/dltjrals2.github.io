@@ -10,7 +10,7 @@ toc:  true
 toc_sticky: true
 show_date: true
 read_time: false
-use_math: true
+use_math: false
 
 date: 2021-08-26
 last_modified_at: 2021-08-26
@@ -105,10 +105,98 @@ sitemap :
 
 > 나의 풀이  
 
+```python
+n, m = map(int, input().split())
+chicken_map = [[0] * n for _ in range(n)]
+
+
+for i in range(n):
+    chicken_map[i] = list(map(int, input().split()))
+
+def solution(n, m, chicken_map):
+    house_info = list()
+    chicken_info = list()
+    num = 0
+
+    for i in range(n):
+        for j in range(n):
+            # 집인 경우
+            if chicken_map[i][j] == 1:
+                house_info.append([i + 1, j + 1])
+            # 치킨 집인 경우
+            elif chicken_map[i][j] == 2:
+                chicken_info.append([i + 1, j + 1])
+                num += 1
+    # 폐업하는 가게의 수
+    close_door = num - m
+    print(close_door)
+
+    searchMinDistance(house_info, chicken_info, close_door)
+
+def searchMinDistance(house_info, chicken_info, close_door):
+    min_distance = 0
+    sum_list = list()
+
+    for house in house_info:
+        min_value = 99999
+        for chicken in chicken_info:
+            min_distance = abs(house[0] - chicken[0]) + abs(house[1] - chicken[1])
+            if min_distance < min_value:
+                min_value = min_distance
+        sum_list.append(min_value)
+
+    print(sum(sum_list))
+
+solution(n, m, chicken_map)
+```  
+
+각 집마다 치킨집까지의 최소거리를 구하는 것 까지는 했는데 선택 후, 최소가 되도록 치킨집을 폐업했을 때 최소거리를 구하는 것은 못했다.  
+
 > 문제 해설  
+
+이 문제는 기존에 존재하는 치킨집을 줄여서 최대 M개를 유지하면서, 일반 집들로부터 M개의 치킨집까지의 거리를 줄이는 것이 목표이다. 이후에 도시의 치킨 거리 합의 최솟값을 계산하면 된다.  
+파이썬에서는 조합 라이브러리를 제공하므로, 이를 이용하면 모든 경우를 간단히 계산할 수 있다. 따라서 치킨집 중에서 M개를 고르는 모든 경우에 대해서 치킨 거리의 합을 계산하여(완전 탐색), 치킨 거리의 최솟값을 구해 출력하면 된다.  
 
 > 문제 답안  
 
+```python
+from itertools import combinations
+
+n, m = map(int, input().split())
+chicken, house = [], []
+
+for r in range(n):
+    data = list(map(int, input().split()))
+    for c in range(n):
+        if data[c] == 1:
+            house.append((r, c)) # 일반 집
+        elif data[c] == 2:
+            chicken.append((r, c)) # 치킨 집
+
+# 모든 치킨집 중에서 m개의 치킨집을 뽑는 조합 계산
+candidates = list(combinations(chicken, m))
+
+# 치킨 거리의 합을 계산하는 함수
+def get_sum(candidate):
+    result = 0
+    # 모든 집에 대하여
+    for hx, hy in house:
+        # 가장 가까운 치킨집을 찾기
+        temp = 1e9
+        for cx, cy in candidate:
+            temp = min(temp, abs(hx - cx) + abs(hy - cy))
+        # 가장 가까운 치킨집까지의 거리를 더하기
+        result += temp
+    # 치킨 거리의 합 반환
+    return result
+
+# 치킨 거리의 합의 최소를 찾아 출력
+result = 1e9
+for candidate in candidates:
+    result = min(result, get_sum(candidate))
+
+print(result)
+```
 
 <br>
 기출 : 삼성전자 SW 역량테스트  
