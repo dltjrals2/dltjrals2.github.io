@@ -13,7 +13,7 @@ read_time: false
 use_math: false
 
 date: 2021-08-26
-last_modified_at: 2021-08-26
+last_modified_at: 2021-09-02
 sitemap :
   changefreq : daily
   priority : 1.0
@@ -22,7 +22,7 @@ sitemap :
 ## 치킨 배달  
 
 난이도 : ⭐⭐  
-푼횟수 : 🔴⚪⚪  
+푼횟수 : 🔴🟢⚪  
 
 크기가 N×N인 도시가 있다. 도시는 1×1크기의 칸으로 나누어져 있다. 도시의 각 칸은 빈 칸, 치킨집, 집 중 하나이다. 도시의 칸은 (r, c)와 같은 형태로 나타내고, r행 c열 또는 위에서부터 r번째 칸, 왼쪽에서부터 c번째 칸을 의미한다. r과 c는 1부터 시작한다.  
 
@@ -106,48 +106,34 @@ sitemap :
 > 나의 풀이  
 
 ```python
-n, m = map(int, input().split())
-chicken_map = [[0] * n for _ in range(n)]
+from itertools import combinations
 
+n, m = map(int, input().split())
+house, chicken = [], []
 
 for i in range(n):
-    chicken_map[i] = list(map(int, input().split()))
+    map_info = list(map(int, input().split()))
+    for j in range(n):
+        if map_info[j] == 1:
+            house.append((i, j))
+        elif map_info[j] == 2:
+            chicken.append((i, j))
 
-def solution(n, m, chicken_map):
-    house_info = list()
-    chicken_info = list()
-    num = 0
+candidates = combinations(chicken, m)
 
-    for i in range(n):
-        for j in range(n):
-            # 집인 경우
-            if chicken_map[i][j] == 1:
-                house_info.append([i + 1, j + 1])
-            # 치킨 집인 경우
-            elif chicken_map[i][j] == 2:
-                chicken_info.append([i + 1, j + 1])
-                num += 1
-    # 폐업하는 가게의 수
-    close_door = num - m
-    print(close_door)
+def get_distance(candidate):
+    distance = 0
+    for hx, hy in house:
+        temp = 1e9
+        for cx, cy in candidate:
+            temp = min(temp, abs(hx - cx) + abs(hy - cy))
+        distance += temp
+    return distance
 
-    searchMinDistance(house_info, chicken_info, close_door)
-
-def searchMinDistance(house_info, chicken_info, close_door):
-    min_distance = 0
-    sum_list = list()
-
-    for house in house_info:
-        min_value = 99999
-        for chicken in chicken_info:
-            min_distance = abs(house[0] - chicken[0]) + abs(house[1] - chicken[1])
-            if min_distance < min_value:
-                min_value = min_distance
-        sum_list.append(min_value)
-
-    print(sum(sum_list))
-
-solution(n, m, chicken_map)
+temp = 1e9
+for candidate in candidates:
+    temp = min(temp, get_distance(candidate))
+print(temp)
 ```  
 
 각 집마다 치킨집까지의 최소거리를 구하는 것 까지는 했는데 선택 후, 최소가 되도록 치킨집을 폐업했을 때 최소거리를 구하는 것은 못했다.  
