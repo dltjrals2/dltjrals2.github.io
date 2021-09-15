@@ -1,4 +1,6 @@
 source "https://rubygems.org"
-gem 'wdm', '>= 0.1.0'
-gem 'jekyll-feed'
 gemspec
+
+gem 'wdm', '>= 0.1.0'
+gem 'jekyll-admin', group: :jekyll_plugins
+gem 'jekyll-sitemap'
