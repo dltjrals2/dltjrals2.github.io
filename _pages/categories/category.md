@@ -22,8 +22,8 @@ sidebar_main: true
     </ul>
     <ul>
       {% for category in site.categories %}
-        {% if category[0] == "Chatbot" %}
-          <li><a href="/categories/chatbot" class="">Chatbot (with Selenium) ({{category[1].size}})</a></li>
+        {% if category[0] == "Crawler" %}
+          <li><a href="/categories/crawler" class="">Crawler (with Selenium) ({{category[1].size}})</a></li>
           {% endif %}
       {% endfor %}
     </ul>
