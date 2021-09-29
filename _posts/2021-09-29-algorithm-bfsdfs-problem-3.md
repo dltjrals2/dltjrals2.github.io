@@ -4,7 +4,7 @@ title: "[BFS/DFS] 연산자 끼워 넣기"
 categories:
   - Algorithm
 tags:
-  - [Algorithm, Python, DFS, BFS]
+  - [Algorithm, Python, DFS, BFS, 풀이실패]
 
 toc:  true
 toc_sticky: true
@@ -22,7 +22,7 @@ sitemap :
 ## 연산자 끼워 넣기  
 
 난이도 : ⭐⭐  
-푼횟수 : ⚪⚪⚪  
+푼횟수 : 🔴⚪⚪  
 
 N개의 수로 이루어진 수열 A1, A2, ..., AN이 주어진다. 또, 수와 수 사이에 끼워넣을 수 있는 N-1개의 연산자가 주어진다. 연산자는 덧셈(+), 뺄셈(-), 곱셈(×), 나눗셈(÷)으로만 이루어져 있다.  
 
@@ -83,15 +83,64 @@ N개의 수와 N-1개의 연산자가 주어졌을 때, 만들 수 있는 식의
 
 > 나의 풀이  
 
+풀이실패  
 
 > 문제 해설  
 
+모든 경우의 수를 계산하기 위해(완전 탐색) DFS 혹은 BFS를 이용하여 문제를 해결할 수 있다.  
+이 문제에서는 각 사칙연산을 중복하여 사용할 수 있기 때문에, 이 문제를 풀기 위해서는 중복 순열을 계산해야 한다. 예를 들어 n = 4라고 하면, 사칙연산 중에서 중복을 허용하여 3개를 뽑아 나열하는 모든 경우를 고려해야 한다. 이는 파이썬에서 중복 순열 라이브러리를 이용하여 찾을 수 있다.  
+
+```
+from itertools import product
+
+n = 4
+print(list(product(['+', '-', '*', '/'], repeat = (n - 1))))
+```  
+
+여기서는 중복순열 클래스를 사용하지 않고 DFS를 이용하여 푼다.  
 
 > 문제 답안  
 
+```python
+n = int(input())
+array = list(map(int, input().split()))
+operator = list(map(int, input().split()))
+
+min_value = 1e9
+max_value = -1e9
+
+def dfs(i, now):
+    global min_value, max_value, operator
+    if i == n:
+        min_value = min(min_value, now)
+        max_value = max(max_value, now)
+    else:
+        if operator[0] > 0:
+            operator[0] -= 1
+            dfs(i + 1, now + array[i])
+            operator[0] += 1
+        if operator[1] > 0:
+            operator[1] -= 1
+            dfs(i + 1, now - array[i])
+            operator[1] += 1
+        if operator[2] > 0:
+            operator[2] -= 1
+            dfs(i + 1, now * array[i])
+            operator[2] += 1
+        if operator[3] > 0:
+            operator[3] -= 1
+            dfs(i + 1, int(now / array[i]))
+            operator[3] += 1
+
+dfs(1, array[0])
+
+print(max_value)
+print(min_value)
+```
+
 
 <br>
-기출 : 2020 카카오 신입 공채 1차  
+기출 : 삼성전자 SW 역량테스트  
 링크 : <https://www.acmicpc.net/problem/14888>  
 
 ---
