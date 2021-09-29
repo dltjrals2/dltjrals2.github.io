@@ -10,6 +10,7 @@ sidebar_main: true
   <input id="ac-toc" name="accordion-toc" type="checkbox" />
   <label for="ac-toc">{{ site.data.ui-text[site.locale].menu_label }}</label>
   <ul class="nav__items" id="category_tag_menu">
+
     <ul>
       {% for category in site.categories %}
         {% if category[0] == "Algorithm" %}
@@ -20,6 +21,7 @@ sidebar_main: true
           {% endif %}
           {% endfor %}
     </ul>
+
     <ul>
       {% for category in site.categories %}
         {% if category[0] == "Crawler" %}
@@ -27,6 +29,15 @@ sidebar_main: true
           {% endif %}
       {% endfor %}
     </ul>
+
+    <ul>
+      {% for category in site.categories %}
+        {% if category[0] == "Network" %}
+          <li><a href="/categories/network" class="">Network({{category[1].size}})</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
     <ul>
       {% for category in site.categories %}
         {% if category[0] == "Gitblog" %}
@@ -34,6 +45,5 @@ sidebar_main: true
         {% endif %}
       {% endfor %}
     </ul>
-
   </ul>
 </nav>
