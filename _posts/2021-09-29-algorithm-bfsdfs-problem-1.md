@@ -4,7 +4,7 @@ title: "[BFS/DFS] 경쟁적 전염"
 categories:
   - Algorithm
 tags:
-  - [Algorithm, Python, DFS, BFS]
+  - [Algorithm, Python, DFS, BFS, 풀이참고]
 
 toc:  true
 toc_sticky: true
