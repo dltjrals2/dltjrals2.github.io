@@ -1,5 +1,5 @@
 ---
-title: "[Network] 인터넷, 인트라넷, 엑스트라넷, 이더넷 개념"
+title: "[Network] 인터넷, 인트라넷, 엑스트라넷, 이더넷 개념 정리"
 
 categories:
   - Network

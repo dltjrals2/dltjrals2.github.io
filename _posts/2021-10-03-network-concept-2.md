@@ -1,10 +1,10 @@
 ---
-title: "[Network] 토큰링, UTP 케이블, 케이블의 종류, MAC Address"
+title: "[Network] 토큰링, UTP 케이블, 케이블의 종류, MAC Address 개념 정리"
 
 categories:
   - Network
 tags:
-  - [Network, Internet, Intranet, Extranet, Ethernet]
+  - [Network, TokenRing, UTP, MAC Address]
 
 toc:  true
 toc_sticky: true
