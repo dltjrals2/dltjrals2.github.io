@@ -33,7 +33,7 @@ sidebar_main: true
     <ul>
       {% for category in site.categories %}
         {% if category[0] == "Network" %}
-          <li><a href="/categories/network" class="">Network({{category[1].size}})</a></li>
+          <li><a href="/categories/network" class="">Network ({{category[1].size}})</a></li>
         {% endif %}
       {% endfor %}
     </ul>
