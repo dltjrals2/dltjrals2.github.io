@@ -1,5 +1,5 @@
 ---
-title: "[Network] 스패닝 트리 프로토콜 개념 정리"
+title: "[Network] 스패닝 트리 프로토콜 개념 정리 1"
 
 categories:
   - Network
