@@ -34,10 +34,10 @@
 .archive__subtitle {
   margin: 0.8em 0 0;
   padding-bottom: 0.5em;
-  font-size: 1.563em;
-  color: #ffd966;
-  border-bottom: 1px solid #5f6365;
-  font-family: "Coming Soon",Georgia,Times,serif;
+  font-size: $type-size-3;
+  color: mix(#fff,$primary-color, 40%);
+  border-bottom: 1px solid $border-color;
+  font-family: $serif;
 
   + .list__item .archive__item-title {
     margin-top: 0.5em;
@@ -45,11 +45,13 @@
 }
 
 .archive__item-title {
-  margin-bottom: 0.25em;
+  margin-bottom: 0.9em;
   font-family: $sans-serif-narrow;
-  line-height: initial;
+  line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: $cute;
+  font-size: $type-size-4;
 
   a[rel="permalink"]::before {
     content: '';
@@ -200,14 +202,6 @@
   .page__meta {
     margin: 0 0 4px;
     font-size: 0.6em;
-  }
-
-  .page__meta-sep {
-    display: block;
-
-    &::before {
-      display: none;
-    }
   }
 
   .archive__item-title {
