@@ -49,20 +49,19 @@ n x m 크기의 금광이 있습니다. 금광은 1 x 1 크기의 칸으로 나�
 > 나의 풀이  
 
 ```python
-# 테스트 케이스 입력
-for tc in range(int(input())):
-    # 금광 정보 입력
+T = int(input())
+
+for TestCase in range(T):
     n, m = map(int, input().split())
     array = list(map(int, input().split()))
 
-    # 다이나믹 프로그래밍을 위한 2차원 DP 테이블 초기화
     dp = []
     index = 0
     for i in range(n):
-        dp.append(array[index:index + m])
+        dp.append(array[index:index+m])
         index += m
 
-    # 다이나믹 프로그래밍 진행
+    # Dynamic Programming
     for j in range(1, m):
         for i in range(n):
             # 왼쪽 위에서 오는 경우
@@ -76,6 +75,7 @@ for tc in range(int(input())):
                 left_down = 0
             else:
                 left_down = dp[i + 1][j - 1]
+
             # 왼쪽에서 오는 경우
             left = dp[i][j - 1]
             dp[i][j] = dp[i][j] + max(left_up, left_down, left)
@@ -86,7 +86,6 @@ for tc in range(int(input())):
 
     print(result)
 ```
-
 
 > 문제 해설  
 
