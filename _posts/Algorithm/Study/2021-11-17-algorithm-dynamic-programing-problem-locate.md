@@ -10,7 +10,7 @@ toc:  true
 toc_sticky: true
 
 date: 2021-11-17
-last_modified_at: 2021-11-17
+last_modified_at: 2021-11-18
 ---
 
 ## 병사 배치하기
@@ -54,6 +54,19 @@ N명의 병사가 무작위로 나열되어 있다. 각 병사는 특정한 값�
 
 > 나의 풀이  
 
+```python
+n = int(input())
+power = list(map(int, input().split()))
+power.reverse()
+dp = [1] * (n + 1)
+
+for i in range(n):
+    for j in range(0, i):
+        if power[j] < power[i]:
+            dp[i] = max(dp[i], dp[j] + 1)
+
+print(n - max(dp))
+```
 
 > 문제 해설  
 
