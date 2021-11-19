@@ -4,7 +4,7 @@ title: "[Dynamic Programing] 편집 거리"
 categories:
   - Algorithm
 tags:
-  - [Dynamic Programing, Python, 풀이 실패]
+  - [Dynamic Programing, Python]
 
 toc:  true
 toc_sticky: true
@@ -16,7 +16,7 @@ last_modified_at: 2021-11-18
 ## 편집 거리
 
 난이도 : 🌕🌗   
-푼횟수 : 🔴⚪⚪  
+푼횟수 : 🔴🟢⚪  
 
 두 개 의 문자열 A와 B가 주어졌을 때, 문자열 A를 편집하여 문자열 B로 만들고자 합니다. 문자열 A를 편집할 때는 다음의 세 연산 중에서 한 번에 하나씩 선택하여 이용할 수 있습니다.  
 
@@ -93,7 +93,7 @@ def edit_dist(str1, str2):
     for i in range(1, n + 1):
         for j in range(1, m + 1):
             # 문자가 같다면, 왼쪽 위에 해당하는 수를 그대로 대입
-            if str1[i - 1] == str2[i - 1]:
+            if str1[i - 1] == str2[j - 1]:
                 dp[i][j] = dp[i - 1][j - 1]
             # 문자가 다르다면, 3가지 경우 중에서 최솟값 찾기
             else: # 삽입(왼쪽), 삭제(위쪽), 교체(왼쪽 위) 중에서 최소 비용을 찾아 대입
