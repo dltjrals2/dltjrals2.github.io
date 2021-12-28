@@ -12,14 +12,14 @@
           <ul>
             {% for category in site.categories %}
               {% if category[0] == "Algorithm" %}
-                <li><a href="/categories/algorithm" class="">Algorithm ({{category[1].size}})</a></li>
+                <li><a href="/categories/algorithm" class="">Concept&Problem (이.코.테) ({{category[1].size}})</a></li>
               {% endif %}
             {% endfor %}
           </ul>
           <ul>
             {% for category in site.categories %}
-              {% if category[0] == "AlgorithmRe" %}
-                <li><a href="/categories/algorithmRe" class="">Algorithm Review ({{category[1].size}})</a></li>
+              {% if category[0] == "Appendix" %}
+                <li><a href="/categories/appendix" class="">Appendix (이.코.테) ({{category[1].size}})</a></li>
               {% endif %}
             {% endfor %}
           </ul>
