@@ -27,8 +27,8 @@
         <span class="nav__sub-title">Python</span>
           <ul>
             {% for category in site.categories %}
-              {% if category[0] == "Crawler" %}
-                <li><a href="/categories/crawler" class="">Crawler (with Selenium) ({{category[1].size}})</a></li>
+              {% if category[0] == "WebScraping" %}
+                <li><a href="/categories/webscraping" class="">WebScraping (with Selenium) ({{category[1].size}})</a></li>
               {% endif %}
             {% endfor %}
           </ul>

@@ -1,8 +1,8 @@
 ---
-title: "[크롤러] 개발 환경 설정"
+title: "[WebScraping] 개발 환경 설정"
 
 categories:
-  - Crawler
+  - WebScraping
 tags:
   - [Crawler, Python, Selenium, PyQt5, Qt Designer]
 
@@ -10,14 +10,14 @@ toc:  true
 toc_sticky: true
 
 date: 2021-09-27
-last_modified_at: 2021-09-27
+last_modified_at: 2022-01-04
 ---
 
 ## 개발 환경 설정  
 
 📌**<u>개발 환경</u>**
 ```
-OS = Window and Mac (사무공간과 휴대용으로 둘 다 사용합니다.)
+OS = Window and Mac
 Python = 3.8 (Selenium)
 IDE : Pycharm
 PyQt
@@ -146,7 +146,7 @@ PyRcc
 ![image](https://user-images.githubusercontent.com/37467408/134836232-c0504d80-efb6-49c4-a192-4854da250eaf.PNG)  
 
 ---
-**🐢 현재 개발하고 있는 웹크롤러의 개발 과정을 기록하기 위한 공간입니다. 또한 해당 코드는 상업적 목적으로 사용될 예정이지만 PyQt5 GPL v3에 따라 코드는 공개됩니다. 🐢**
+**🐢개발 완료 된 프로그램에 대한 개념 및 내용을 정리하고자 하는 목적으로 작성되었습니다. 궁금하신점은 댓글 남겨주세요.🐢**
 {: .notice--primary}
 
 감사합니다.😊
