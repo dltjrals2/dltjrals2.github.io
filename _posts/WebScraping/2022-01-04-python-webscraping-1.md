@@ -10,17 +10,20 @@ toc:  true
 toc_sticky: true
 
 date: 2022-01-04
-last_modified_at: 2022-01-04
+last_modified_at: 2022-01-07
 ---
 
-📌**<u>개발 환경</u>**
+📌**<u>개발 환경</u>**  
 ```
 OS = Window and Mac
 Python = 3.8 (Selenium)
 IDE : Pycharm
 PyQt
 Qt Designer
-```
+```  
+
+---
+📌**<u>전체코드는 https://github.com/dltjrals2/WebScrapingTool 에 있으니, 참고해주세요.</u>**  
 
 ## Data Select UI  
 
@@ -78,6 +81,7 @@ Qt Designer
 
 ![image](https://user-images.githubusercontent.com/37467408/147999683-de4f16b2-5576-42f2-8972-e4926760fa65.png)  
 - 로그인 상태와 웹에 접근해 로그인 처리가 되는 과정을 ProgressBar을 통해 확인 > objectName : Login_Status, Login_ProgressBar  
+
 
 ---
 **🐢개발 완료 된 프로그램에 대한 개념 및 내용을 정리하고자 하는 목적으로 작성되었습니다. 궁금하신점은 댓글 남겨주세요.🐢**
