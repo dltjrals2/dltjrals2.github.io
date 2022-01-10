@@ -1,5 +1,5 @@
 ---
-title: "[WebScraping] PyQt5 구조 및 GUI 다루기"
+title: "[WebScraping] PyQt5 구조 및 GUI 사용방법"
 
 categories:
   - WebScraping
