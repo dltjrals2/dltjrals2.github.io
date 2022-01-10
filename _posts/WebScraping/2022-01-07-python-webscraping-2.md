@@ -23,7 +23,7 @@ Qt Designer
 ```  
 
 ---
-📌**<u>전체코드는 https://github.com/dltjrals2/WebScrapingTool 에 있으니, 참고해주세요.</u>**  
+📌 전체코드 주소 : <https://github.com/dltjrals2/WebScrapingTool>  
 
 ## PyQt5 프로그램 구조  
 

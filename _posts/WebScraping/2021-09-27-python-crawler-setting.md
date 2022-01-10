@@ -22,7 +22,10 @@ Python = 3.8 (Selenium)
 IDE : Pycharm
 PyQt
 Qt Designer
-```
+```  
+
+---
+📌 전체코드 주소 : <https://github.com/dltjrals2/WebScrapingTool>  
 
 ### 1. Selenium 설치
 
