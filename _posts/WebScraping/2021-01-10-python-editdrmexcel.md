@@ -1,5 +1,5 @@
 ---
-title: "[WebScraping] DRM Excel 문서 자동화 처리"
+title: "[WebScraping] DRM Excel 및 Word 문서 자동화 처리"
 
 categories:
   - WebScraping
@@ -10,7 +10,7 @@ toc:  true
 toc_sticky: true
 
 date: 2022-01-10
-last_modified_at: 2022-01-10
+last_modified_at: 2022-01-11
 ---
 
 📌**<u>개발 환경</u>**  
@@ -32,7 +32,9 @@ IDE : Pycharm
 
 - xlwings 설치 및 설정 사이트 : <https://streamls.tistory.com/262>  
 
-xlwings를 사용하는 방식은 많은 방식이 있지만, 여기서는 제가 사용한 방법만 설명하도록 하겠습니다.  
+xlwings를 사용하는 방식은 엑셀 자동화 프로그램 VBA를 참고하시면 도움이 될 것 같습니다.  
+
+여기서는 제가 사용한 방법만 설명하도록 하겠습니다.  
 
 ### DRM Excel 문서 실행  
 
@@ -153,6 +155,55 @@ excelFile.close()
 
 excelFile.save()는 기존에 사용하던 파일 이름으로 저장하는 방식이고, excelFile.save(String)은 String 문자열 이름으로 문서를 저장하는 것이다.  
 excelFile.close()를 통해 실행되어진 excelFile을 닫을 수 있다.  
+
+## DRM Word 문서 자동화 처리  
+
+보통 word 문서를 처리하기 위해 docx 라이브러리를 이용하는데, DRM 워드 문서를 처리하기 위해서 win32com.client를 이용해서 작업을 진행하였다.  
+
+여기서는 제가 사용한 방법만 설명하도록 하겠습니다.  
+
+### DRM word 문서 실행  
+
+```python
+import os
+import win32com
+PROGRAM_DIR = os.getcwd()
+
+word_file = PROGRAM_DIR + r'\file_name.docx'
+word = win32com.client.Dispatch("Word.Application")
+wb = word.document.Open(word_file)
+doc = word.ActiveDocument
+```  
+
+### DRM word 테이블 접근 및 값 수정  
+
+테이블이 위에서 부터 숫자가 매겨지며, 처음 테이블은 1부터 시작합니다.  
+
+또한, 테이블 Cell에 접근은 아래와 같은 방식으로 하고, 1부터 시작합니다.
+
+```python
+import os
+import win32com
+PROGRAM_DIR = os.getcwd()
+
+word_file = PROGRAM_DIR + r'\file_name.docx'
+word = win32com.client.Dispatch("Word.Application")
+wb = word.document.Open(word_file)
+doc = word.ActiveDocument
+
+table = doc.Tables({})
+
+table.Cell(Row = {}, Column = {}).Range = "{}"
+```  
+
+table = doc.Tables(1) : 첫 번째 테이블 지정
+table = dic.Tables(2) : 두 번째 테이블 지정  
+table.Cell(Row = 1, Column = 1).Range = "Data" : 1번째 행의 1번째 열 데이터를 "Data"로 입력
+table.Cell(Row = 3, Column = 4).Range = "Data" : 3번째 행의 4번째 열 데이터를 "Data"로 입력
+
+저는 Word의 테이블을 수정하는 기능만 필요해서 이 정도만 사용했습니다.
+
+더 자세히 알고 싶은 분들은 `win32com.client`로 word를 작업하는 내용을 찾아보시면 될 것 같습니다.  
 
 ---
 **🐢개발 완료 된 프로그램에 대한 개념 및 내용을 정리하고자 하는 목적으로 작성되었습니다. 궁금하신점은 댓글 남겨주세요.🐢**

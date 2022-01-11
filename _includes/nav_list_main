@@ -32,6 +32,13 @@
               {% endif %}
             {% endfor %}
           </ul>
+          <ul>
+            {% for category in site.categories %}
+              {% if category[0] == "Django" %}
+                <li><a href="/categories/django" class="">Django (with React) ({{category[1].size}})</a></li>
+              {% endif %}
+            {% endfor %}
+          </ul>
 
         <span class="nav__sub-title">etc</span>
           <ul>
