@@ -10,7 +10,7 @@ toc:  true
 toc_sticky: true
 
 date: 2022-01-12
-last_modified_at: 2022-01-12
+last_modified_at: 2022-01-13
 ---
 
 ## 파이썬 설치(윈도우)  
@@ -153,6 +153,100 @@ python manage.py runserver
 
 ### 따라해보기  
 
+### 장고 앱의 필요성  
+
+현재 프로젝트의 블로그 기능을 `다른 프로젝트에서도 사용하려한다면???`  
+- 블로그를 장고앱 형태로 격리해서 만들어둔다면, 다른 프로젝트에도 적용하기 편리  
+
+1. 가상환경 프로젝트에서 아래 명령어 실행  
+    python manage.py startapp blog1  
+2. blog1 폴더 아래에 urls.py를 만들고, 아래처럼 입력해준다.  
+
+    ```python
+    urlpatterns = [
+    ]
+    ```  
+   
+### 장고 앱  
+
+`재사용성`을 목적으로한 파이썬 패키지  
+- 재사용성을 목적으로 둔 것이 아니라면, 하나의 장고 앱에서 현재 프로젝트의 거의 모든 기능을 구현해도 무방하다.  
+- 앱을 하나의 작은 서비스로 봐도 무방  
+
+하나의 앱이름은 현재 프로젝트 상에서 `유일`해야한다.  
+
+새롭게 생성한 장고앱이나 외부 라이브러리 형태의 장고앱은 `필히 settings.ISTALLED_APPS 에 등록`을 시켜줘야만 장고앱으로서 대접을 받는다.  
+- 앱의 URLConf 를 제외한 많은 부분(모델, Template, static 등) 들이 자동으로 등록된다.  
+
+1. PROJECT_NAME 폴더에 settings.py로 이동해 ISTALLED_APPS를 수정해준다.  
+    ```python
+    INSTALLED_APPS = [
+        # django Default Apps..
+        # 'blog1',
+    ]
+    ```  
+
+2. blog1 폴더 models.py로 이동해 아래 내용 추가  
+    ```python
+    class Post(models.Model):
+        title = models.CharField(max_length=100)
+        content = models.TextField
+        created_at = models.DateTimeField(auto_now_add=True)
+        updated_at = models.DateTimeField(auto_now=True)
+    ```  
+
+3. blog1 migration 진행  
+    ```
+    python manage.py makemigrations blog1
+    python manage.py migrate blog1
+    ```  
+
+4. blog1 admin.py 수정  
+    ```python
+    from .models import Post
+
+    admin.site.register(Post)
+    ```  
+
+5. PROJECT_NAME 폴더 urls.py 수정  
+    ```python
+    from django.urls import path, include
+
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('blog1/', include('blog1.urls')),
+    ]
+    ```  
+
+6. blog1/view.py 수정  
+    ```python
+    from django.shortcuts import render
+    from .models import Post
+
+    def post_list(request):
+        qs = Post.objects.all() # QuerySet
+        return render(request, 'blog1/post_list.html', {
+            'post_list' : qs,
+        })
+    ```  
+
+7. blog1/templates/blog1 폴더 만든 후, 폴더 내에 post_list.html 생성 후 수정  
+    ```html
+    <h1>Post List</h1>
+    {% raw %}{% for post in post_list %}{% endraw %}
+        {% raw %}<h2>{{ post.title }}</h2>{% endraw %}
+        {% raw %}{{ post.content }}{% endraw %}
+    {% raw %}{% endfor %}{% endraw %}
+    ```  
+
+8. blog1/urls.py 수정  
+    ```python
+    from . import views
+
+    urlpatterns = [
+        path('', views.post_list, name='post_list'),
+    ]
+    ```  
 
 ---
 **🐢 현재 공부하고 있는 `파이썬/장고 웹서비스 개발 완벽 가이드 with 리액트 - 이진석 강사` 의 강의를 학습하며 기록 및 정리를 하기위한 내용들입니다. 🐢**
