@@ -52,12 +52,220 @@ urls.py/urlpatterns 리스트에 매핑된 `호출 가능한 객체`
 -- 장고 디폴트 설정에서 str 문자열을 utf8로 인코딩  
 - response = HttpResponse(파일 like 객체 또는 str 객체 또는 bytes 객체)  
 
-파일 l
+파일 like 객체  
+- response.write(str 객체 또는 bytes 객체)  
 
+### HttpRequest와 HttpRespnse 예시  
+
+```python
+from django.db import HttpRequest, HttpResponse
+
+def index(request: HttpRequest) -> HttpResponse # View 함수
+    # 주요 request 속성
+    request.method # 'GET', 'POST', etc.
+    request.META
+    request.GET, request.POST, request.FILES, request.body
+
+    content = ```
+        <html>...</html>
+    ``` # 문자열 혹은 이미지, 각종 파일 등
+
+    response = HttpResponse(content)
+    response.write(content) # response -> file-like object
+    response['Cutom-Header'] = 'Custom Header Value'
+    return response
+```  
+
+### FBV의 예  
+- Item 목록 보기  
+
+```python
+# myapp/views.py
+from django.shortcuts import render
+from shop.models import Item
+
+def item_list(request):
+    qs = Item.objects.all()
+    return render(request, 'shop/item_list.html', {
+        'item_list': qs,
+    })
+
+# myapp/urls.py
+from django.urls import path
+
+urlpatterns = [
+    path('item/', item_list, name='item_list'),
+]
+```
+
+### CBV의 예  
+- Item 목록 보기  
+
+```python
+# 방법 1
+from django.view.generic import ListView
+from shop.models import Item
+
+item_list = ListView.as_view(model=Item)
+
+from django.urls import path
+
+urlpatterns = [
+    path('items/', item_list, name='item_list')
+]
+
+# 방법 2
+from django.views.generic import ListView
+from shop.models import Item
+
+class ItemListView(ListView):
+    model = Item
+item_list = ItemListView.as_view()
+
+from django.urls import path
+
+urlpatterns = [
+    path('item/', item_list, name='item_list'),
+]
+```
 
 ## 다양한 응답의 함수 기반 뷰 - 2  
 
+### Excel 파일 다운로드 응답  
 
+```python
+from django.http import HttpResponse
+from urllib.parse import quote
+
+def response_excel(request):
+    filepath = '/other/path/excel.xls'
+    filename = os.path.basename(filepath)
+    
+    with open(filepath, 'rb') as f:
+        response = HttpResponse(f, content_type="application/vnd.ms-excel")
+
+        # 브라우저에 따라 다른 처리가 필요
+        encoded_filename = quote(filename)
+        response['Content-Disposition'] = "attachment; filename+=utf-8''{}".format(encoded_filename)
+
+    return response
+```
+
+### Pandas를 통한 CSV 응답 생성  
+
+```python
+import pandas as pd
+from io import StringIO
+from django.http import HttpResponse
+
+def response_csv(request):
+    df = pd.DataFrame([
+        [100, 110, 120],
+        [200, 210, 220],
+        [300, 310, 320],
+    ])
+
+    io = StringIO()
+    df.to_csv(io)
+    io.seek() # 끝에 있는 file cursoe를 처음으로 이동
+
+    response = HttpResponse(io, contend_type='text/csv')
+    response['Content-Disposition'] = "attachment; filename+=utf-8''{}".format(encoded_filename)
+    
+    return response
+```  
+
+### Pandas를 통한 엑셀 응답 생성  
+
+```python
+import pandas as pd
+from io import BytesIO
+from urllib.parse import quote
+from django.http import HttpResponse
+
+def response_excel(request):
+    df = pd.DataFrame([
+        [100, 110, 120],
+        [200, 210, 220],
+    ])
+
+    io = BytesIO()
+    df.to_excel(io)
+    io.seek(0)
+
+    encoded_filename = quote('pandas.xlsx')
+    response = HttpResponse(io, contend_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = "attachment; filename+=utf-8''{}".format(encoded_filename)
+    
+    return response
+```
+
+### Pollow를 통한 이미지 응답 생성 - 기본  
+
+```python
+import requests
+from io import BytesIO
+from PIL import Image, ImageDraw, ImageFont
+
+ttf_path = 'C:/Windows/Fonts/malgun.ttf'    # 윈도우의 맑은고딕 폰트 경로
+image_url = 'http://www.flowermeaning.com/flower-pics/Calla-Lily-Meaning.jpg'
+
+res = requests.get(image_url)   # 서버로 HTTP GET 요청하여, 응답 획득
+io = BytesIO(res.content) # 응답의 Raw Body, 메모리 파일 객체 BytesIO 인스턴스 생성
+io.seek(0)  # 파일의 처음으로 커서를 이동
+
+canvas = Image.open(io).convert('RGBA') # 이미지 파일을 열고, RGBA모드로 변환
+
+font = ImageFont.Truetype(ttf_path, 40) # 지정 경로의 TrueType 폰트, 폰트크기 40
+draw = ImageDraw.Draw(canvas)   # canvas에 대한 ImageDraw 객체 획득
+
+text = 'Ask Company'
+left, top = 10, 10
+margin = 10
+width, height = font.getsize(text)
+right = left + width + margin
+bottom = top + height + margin
+
+draw.rectangle((left, top, right, bottom), (255, 255, 224))
+draw.text((15, 15), text, font=font, fill=(20, 20, 20))
+
+canvas.show()
+```
+
+### Pillow를 통한 이미지 응답 생성 - View  
+
+```python
+import requests
+from io import BytesIO
+from PIL import Image, ImageDraw, ImageFont
+
+
+def response_pillow_image(request):
+    ttf_path = 'C:/Windows/Fonts/malgun.ttf'    # 윈도우의 맑은고딕 폰트 경로
+    image_url = 'http://www.flowermeaning.com/flower-pics/Calla-Lily-Meaning.jpg'
+    
+    res = requests.get(image_url)   # 서버로 HTTP GET 요청하여, 응답 획득
+    io = BytesIO(res.content) # 응답의 Raw Body, 메모리 파일 객체 BytesIO 인스턴스 생성
+    io.seek(0)  # 파일의 처음으로 커서를 이동
+
+    canvas = Image.open(io).convert('RGBA') # 이미지 파일을 열고, RGBA모드로 변환
+
+    font = ImageFont.Truetype(ttf_path, 40) # 지정 경로의 TrueType 폰트, 폰트크기 40
+    draw = ImageDraw.Draw(canvas)   # canvas에 대한 ImageDraw 객체 획득
+
+    text = 'Ask Company'
+    left, top = 10, 10
+    margin = 10
+    width, height = font.getsize(text)
+    right = left + width + margin
+    bottom = top + height + margin
+    draw.rectangle((left, top, right, bottom), (255, 255, 224))
+    draw.text((15, 15), text, font=font, fill=(20, 20, 20))
+
+    response = HttpResponse(content_type='image/png')
+    canvas.save(response, format='PNG') # HttpResponse의 file-like 특성 활용
+    return response
+```
 
 <br>
 ---
