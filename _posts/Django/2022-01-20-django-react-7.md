@@ -1,5 +1,5 @@
 ---
-title: "[Django] 장고 Views를 활용한 HTTP 요청 처리"
+title: "[Django] 장고 Views를 활용한 HTTP 요청 처리 - 1"
 
 categories:
   - Django
