@@ -10,7 +10,7 @@ toc:  true
 toc_sticky: true
 
 date: 2022-01-23
-last_modified_at: 2022-01-23
+last_modified_at: 2022-01-24
 ---
 
 ## 클래스 기반 뷰 시작하기  
@@ -457,10 +457,6 @@ BaseListView
 - MultipleObjectMixin : Paginator가 적용된 QuerySet 획득  
 -- ContextMixin  
 - View  
-
-
-
-
 
 ## 장고 기본 CBV API (Generic display views) - 3
 
