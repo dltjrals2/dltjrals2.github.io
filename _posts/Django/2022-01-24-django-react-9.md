@@ -259,6 +259,54 @@ class PostMonthArchiveView(WeekArchiveView):
     model = Post
     date_field = 'created_at'
     week_format = '%m'
+```  
+
+### DayArchiveView  
+- 지정 year/month/day 일의 목록  
+
+필요한 URL 인자  
+- "year", "month", "day"  
+
+옵션  
+- month_format(디폴트: "%b")  
+-- 숫자 포맷은 "%m"  
+
+디폴트 template_name_suffix: "_archive_day.html"  
+
+Context  
+- day, previous_day, next_day  
+- date_list: 전체 Record의 날짜 목록  
+- object_list  
+
+```python
+urlpatterns = [
+    re_path(r'^archive/(?P<year>\d{4}/'
+            r'(?P<month>\n{1,2}/(?P<day>\d{1,2})/$', ...),
+]
+
+from django.views.generic.dates import DayArchiveView
+from .models import Post
+
+class PostDayArchiveView(DayArchiveView):
+    model = Post
+    date_field = 'created_at'
+    month_format = '%m'
+```  
+
+### TodayArchiveView  
+- 오늘 날짜의 목록  
+
+필요한 URL 인자 : 없음  
+
+DayArchiveView와 유사하게 동작하지만,  
+- year/month/day 인자를 받지 않는다.  
+- previous_day, next_day 미제공  
+
+```python
+from django.views.generic.dates import TodayArchiveView
+from .models import Post
+
+post_today_archive = TodayArchiveView.as_view(model=Post, date_field='created_at')
 ```
 
 ## 적절한 HTTP 상태코드로 응답하기  
