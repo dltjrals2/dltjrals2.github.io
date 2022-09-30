@@ -40,6 +40,15 @@
             {% endfor %}
           </ul>
 
+          <span class="nav__sub-title">Autonomous Driving</span>
+            <ul>
+              {% for category in site.categories %}
+                {% if category[0] == "Autonomous_Algorithm" %}
+                  <li><a href="/categories/Autonomous_Algorithm" class="">Algorithm ({{category[1].size}})</a></li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+
         <span class="nav__sub-title">etc</span>
           <ul>
             {% for category in site.categories %}
