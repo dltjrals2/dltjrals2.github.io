@@ -17,6 +17,11 @@ last_modified_at: 2022-10-04
 
 ## A*(A-star) 최단 경로 알고리즘  
 
+- 출발 꼭짓점부터 목표 꼭짓점까지 가는 최단 경로 찾기 알고리즘  
+- Dijkstra 알고리즘과 유사하나 차이가 분명히 있다.  
+-- Heuristic 추정값 h가 존재  
+- 평가함수인 f를 모든 꼭짓점마다 계산  
+
 ### Node 클래스  
 
 Node 클래스는 아래와 같다.  
@@ -50,7 +55,7 @@ A* 알고리즘의 핵심 값인 F, G, H에 대해 알아보자.
 
 이해를 돕기 위해, 아래의 예제를 들어보며 확인해보자.(초록 점 = 시작, 빨간 점 = 종료)  
 
-![image](https://user-images.githubusercontent.com/37467408/193744026-fb26689a-b2df-4c18-aa0d-462ef264f8ae.png)  
+![image](https://user-images.githubusercontent.com/37467408/193836940-525e32f6-9d72-4255-9c9c-b3ba7ceb2794.png)  
 
 <center>시작 노드를 `node(0)`, 도착 노드를 `node(8)`</center>  
 
@@ -73,6 +78,10 @@ node(2).g = 2
 
 - H = Heuristic(휴리스틱), 현재 노드에서 목적지까지의 추정 거리  
 
+`Heuristic은 사용하는 거리에 따라 연산 속도, 정확도 등이 다르다.`  
+
+`여러 번의 테스트 후 최적의 Heuristic 값을 대입해야 한다.`  
+
 현재 노드 = `node(2)`에서 목적지까지의 거리를 추정해보자. (현재 노드부터 1이라고 가정)  
 
 5 cost만큼 오른쪽으로 가서, 위로 3 cost만큼 가면 목적지 노드가 있다.  
@@ -88,27 +97,31 @@ node(2).h = $5^2$ + $3^2$ = 34
 
 하지만, 근접 거리나 값이 클 경우 다익스트라 처럼 작동할 수 있다.  
 
-파이썬 코드로는 아래와 같다. (맨해튼 거리)  
+진행 방향이 4방향인 맨해튼 거리의 파이썬 코드로는 아래와 같다.  
 
 ```python
 child.h = (abs(child.position[0] - end_node.position[0]) ** 2) + \
           (abs(child.position[1] - end_node.position[1]) ** 2)
 ```  
 
-또는, 정확하게 하고 싶으면, octile distance + diagonal distance를 이용하면 된다.  
+또는, 진행 방향을 8방향으로 하고 싶으면 Diagonal distance를 이용하면 된다.  
+
+![image](https://user-images.githubusercontent.com/37467408/193836177-3aa2d038-5808-44ca-b7d8-1bfb72d4d33a.png)  
+
+현 지점에서 8개 방향의 각 지점의 f값을 계산하여, 가장 작은 f를 가진 지점을 다음 지점으로 선택  
 
 ```python
 def heuristic(node, goal, D=1, D2=2 ** 0.5):
   dx = abs(node.position[0] - goal.position[0])
   dy = abs(node.position[1] - goal.position[1])
   return D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)
-```
-
-4방향으로 움직이면 보통, 맨해튼 거리를 이용하고, 8방향으로 움직이면 Diagonal Distance를 이용한다.  
+```  
 
 ### F(x)  
 
-- F = 출발 지점에서 목적지까지의 총 cost 합  
+- F = 해당 지점 n에 대한 평가함수  
+- 출발점 ~ 목표점까지 총 cost의 합  
+- f값이 없으면, Dijkstra 알고리즘처럼 '모든 지점에서 목표점까지 가는 방법'을 찾게 되어 시간적, 공간적 낭비이다.  
 
 이제 현재 노드(node(2))의 G값과 H값을 더해보면,  
 
@@ -134,42 +147,39 @@ F 값은 현재 노드가 목적지에 도달하는 데 있어서, 최선의 방
 <br>  
 
 ```python
-/*
-1. openList와 closeList라는 보조 데이터를 사용한다.
-2. F = G + H를 매번 노드를 생성할 때마다 계산한다.
-3. openist에는 현재 노드에서 갈 수 있는 노드를 전부 추가해서 F, G, H를 계산한다.
-openList에 중복된 노드가 있다면, F값이 제일 작은 노드로 바꾼다.
-4. clostList에는 openList에서 F값이 가장 작은 노드를 추가시킨다.
-*/
+"""
+1. Open List : 아직 조사하지 않은(f 평가함수가 계산이 안된) 노드
+2. Closed List : 조사를 마친 노드
+3. 장애물을 제외하고 갈 수 있는 노드를 전부 Open List에 넣음(가운데 Node가 Parent가 되는 것)
+4. 시작점을 Close List에 저장
+5. Open List의 노드 중 가장 작은 f 가지는 사각형 택 & Close List에 저장
+- 해당 노드 기준으로 OpenList 넣고 계산하는 과정 반복
+- 이 때 Open List에는 Close List에 있는 노드 / 장애물을 제외하고 추가, 중복된 노드가 Open List에 있다면, f 값이 가장 작은 노드로 바꾸기
+"""  
 
-openList.add(startNode) # openList는 시작 노드로 init
+open_list.add(start_node) # 시작되는 노드를 먼저 삽입
+while open_list is not empty:
+    current_node <- (open_list에서 가장 작은 f값을 갖는 노드)
+    open_list.remove(current_node) # open_list에서 current_node(가장 작은 f값을 갖는 노드) 제거
+    close_list.add(current_node) # close_list에서 current_node(가장 작은 f값을 갖는 노드) 추가
 
-while openList is not empty:
-  # 현재 노드 = openList에서 F 값 가장 작은 것
-  currentNode <- node in openList having the lowset F value
-  openList.remove(currentNode) # openList에서 현재 노드 제거
-  closeList.add(currentNode) # closeList에서 현재 노드 추가
+    if goal_node is current_node: # 만약 current_node가 목표지점이라면
+        current_node.parent.position 추가 후 경로 출력, 종료
 
-  if goalNode in currentNode:
-    currentNode.parent.position 계속 추가 후
-    경로 출력 후 종료
+    children <- (current_node와 인접한 모든 노드 추가)
 
-  children <- currentNode와 인접한 모든 노드 추가
+    for each child in children: # 인접한 노드 하나하나를 child로 대입
+        if child in close_list: # 민약 child가 close_list에 있다면(이미 최소 f값)
+            continue            # 다른 child를 검사할 수 있도록 continue
 
-  for each child in children:
-    if child in closeList:
-      continue
-
-    child.g = currentNode.g + child와 currentNode 거리(1)
-    child.h = child와 목적지까지의 거리
-    child.f = child.g + child.h
-
-    # child가 openList에 있고, child의 g 값이 openList에 중복된 노드 g값과 같으면
-    # 다른 자식 불러오기
-    if child in openList and child.g > openNode.g in openList:
-      continue
-
-    openList.add(child)
+        child.g = current_node.g + child와 current_node 간 거리
+        child.h = child와 목표점 간 거리
+        child.f = child.g + child.h
+    
+        if (child in open_list) and (child.g > open_node.g in open_list):
+            continue # 만약 child가 open_list에 이미 있고, g가 open_list의 g보다 크면(목표점서 더 멀다) open_list에 추가 안함
+    
+        open_list.add(child) # open_list에 child를 추가함(f, g, h 연산 다 된 노드)
 ```  
 
 <center>`Python Code`</center>  
