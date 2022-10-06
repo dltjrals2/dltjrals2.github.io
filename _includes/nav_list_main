@@ -28,7 +28,7 @@
           <ul>
             {% for category in site.categories %}
               {% if category[0] == "WebScraping" %}
-                <li><a href="/categories/webscraping" class="">WebScraping (with Selenium) ({{category[1].size}})</a></li>
+                <li><a href="/cate gories/webscraping" class="">WebScraping (with Selenium) ({{category[1].size}})</a></li>
               {% endif %}
             {% endfor %}
           </ul>
@@ -49,13 +49,17 @@
               {% endfor %}
             </ul>
             <ul>
-              {% for categoey in site.categories %}
+              {% for category in site.categories %}
+                {% if category[0] == "Autonomous_Concept" %}
                 <li><a href="/categories/Autonomous_Concept" class="">Concept ({{category[1].size}})</a></li>
+                {% endif %}
               {% endfor %}
             </ul>
             <ul>
-              {% for categoey in site.categories %}
+              {% for category in site.categories %}
+                {% if category[0] == "Autonomous_Control" %}
                 <li><a href="/categories/Autonomous_Control" class="">Control ({{category[1].size}})</a></li>
+                {% endif %}
               {% endfor %}
             </ul>
 
