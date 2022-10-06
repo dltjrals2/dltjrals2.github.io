@@ -48,6 +48,16 @@
                 {% endif %}
               {% endfor %}
             </ul>
+            <ul>
+              {% for categoey in site.categories %}
+                <li><a href="/categories/Autonomous_Concept" class="">Concept ({{category[1].size}})</a></li>
+              {% endfor %}
+            </ul>
+            <ul>
+              {% for categoey in site.categories %}
+                <li><a href="/categories/Autonomous_Control" class="">Control ({{category[1].size}})</a></li>
+              {% endfor %}
+            </ul>
 
         <span class="nav__sub-title">etc</span>
           <ul>

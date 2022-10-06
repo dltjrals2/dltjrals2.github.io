@@ -4,7 +4,7 @@ title: "DWA(Dynamic Window Approach) Algorithm"
 categories:
   - Autonomous_Algorithm
 tags:
-  - [DWA, Dynamic Window Approach, Autonomous Drive, Python]
+  - [DWA, Dynamic Window Approach, Autonomous Drive, Python, Robotics]
 
 use_math: true
 

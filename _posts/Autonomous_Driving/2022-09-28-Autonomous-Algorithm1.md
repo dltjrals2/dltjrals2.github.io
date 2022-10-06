@@ -4,7 +4,7 @@ title: "Dijkstra Algorithm"
 categories:
   - Autonomous_Algorithm
 tags:
-  - [Dijkstra Algorithm, Autonomous Drive, Python]
+  - [Dijkstra Algorithm, Autonomous Drive, Python, Robotics]
 
 toc:  true
 toc_sticky: true

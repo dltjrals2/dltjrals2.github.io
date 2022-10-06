@@ -4,7 +4,7 @@ title: "A* (A-star) 최단 경로 찾기 Algorithm"
 categories:
   - Autonomous_Algorithm
 tags:
-  - [A*, A-star, Autonomous Drive, Python]
+  - [A*, A-star, Autonomous Drive, Python, Robotics]
 
 use_math: true
 

@@ -2,9 +2,9 @@
 title: "자율 주행(운항)의 위치 추정 방식"
 
 categories:
-  - Autonomous_Algorithm
+  - Autonomous_Concept
 tags:
-  - [Autonomous Drive, Python]
+  - [Autonomous Drive, SLAM, GPS, Robotics]
 
 use_math: true
 
