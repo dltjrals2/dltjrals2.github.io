@@ -8,78 +8,101 @@
         📂 <span style="font-family:'Cafe24Oneprettynight';">전체 글 수</style> <span style="font-family:'SEBANG_Gothic_Bold';">{{sum}}</style> <span style="font-family:'Cafe24Oneprettynight';">개</style>
       </li>
       <li>
-        <span class="nav__sub-title">Coding Test</span>
-          <ul>
-            {% for category in site.categories %}
-              {% if category[0] == "Algorithm" %}
-                <li><a href="/categories/algorithm" class="">Concept&Problem (이.코.테) ({{category[1].size}})</a></li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-          <ul>
-            {% for category in site.categories %}
-              {% if category[0] == "Appendix" %}
-                <li><a href="/categories/appendix" class="">Appendix (이.코.테) ({{category[1].size}})</a></li>
-              {% endif %}
-            {% endfor %}
-          </ul>
+      <span class="nav__sub-title">Coding Test</span>
+        <ul>
+          {% for category in site.categories %}
+            {% if category[0] == "Algorithm" %}
+              <li><a href="/categories/algorithm" class="">Concept&Problem (이.코.테) ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <ul>
+          {% for category in site.categories %}
+            {% if category[0] == "Appendix" %}
+              <li><a href="/categories/appendix" class="">Appendix (이.코.테) ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
 
-        <span class="nav__sub-title">Python</span>
-          <ul>
-            {% for category in site.categories %}
-              {% if category[0] == "WebScraping" %}
-                <li><a href="/categories/webscraping" class="">WebScraping (with Selenium) ({{category[1].size}})</a></li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-          <ul>
-            {% for category in site.categories %}
-              {% if category[0] == "Django" %}
-                <li><a href="/categories/django" class="">Django (with React) ({{category[1].size}})</a></li>
-              {% endif %}
-            {% endfor %}
-          </ul>
+      <span class="nav__sub-title">Python</span>
+        <ul>
+          {% for category in site.categories %}
+            {% if category[0] == "WebScraping" %}
+              <li><a href="/categories/webscraping" class="">WebScraping (with Selenium) ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <ul>
+          {% for category in site.categories %}
+            {% if category[0] == "Django" %}
+              <li><a href="/categories/django" class="">Django (with React) ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
 
-          <span class="nav__sub-title">Autonomous Driving</span>
-            <ul>
-              {% for category in site.categories %}
-                {% if category[0] == "Autonomous_Algorithm" %}
-                  <li><a href="/categories/Autonomous_Algorithm" class="">Algorithm ({{category[1].size}})</a></li>
-                {% endif %}
-              {% endfor %}
-            </ul>
-            <ul>
-              {% for category in site.categories %}
-                {% if category[0] == "Autonomous_Concept" %}
-                  <li><a href="/categories/Autonomous_Concept" class="">Concept ({{category[1].size}})</a></li>
-                {% endif %}
-              {% endfor %}
-            </ul>
-            <ul>
-              {% for category in site.categories %}
-                {% if category[0] == "Autonomous_Control" %}
-                  <li><a href="/categories/Autonomous_Control" class="">Control ({{category[1].size}})</a></li>
-                {% endif %}
-              {% endfor %}
-            </ul>
+      <span class="nav__sub-title">C/C++</span>
+        <ul>
+          {% for category in site.categories %}
+            {% if category[0] == "C_grammer" %}
+              <li><a href="/categories/C_grammer" class="">C ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+          {% for category in site.categories %}
+            {% if category[0] == "Cplusplus_grammer" %}
+              <li><a href="/categories/Cplusplus_grammer" class="">C++ ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
 
-        <span class="nav__sub-title">etc</span>
-          <ul>
-            {% for category in site.categories %}
-              {% if category[0] == "Network" %}
-                <li><a href="/categories/network" class="">Network ({{category[1].size}})</a></li>
-              {% endif %}
-            {% endfor %}
-          </ul>
+      <span class="nav__sub-title">Autonomous Driving</span>
+        <ul>
+          {% for category in site.categories %}
+            {% if category[0] == "Autonomous_Algorithm" %}
+              <li><a href="/categories/Autonomous_Algorithm" class="">Algorithm ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <ul>
+          {% for category in site.categories %}
+            {% if category[0] == "Autonomous_Concept" %}
+              <li><a href="/categories/Autonomous_Concept" class="">Concept ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <ul>
+          {% for category in site.categories %}
+            {% if category[0] == "Autonomous_Control" %}
+              <li><a href="/categories/Autonomous_Control" class="">Control ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
 
-          <ul>
-            {% for category in site.categories %}
-              {% if category[0] == "Gitblog" %}
-                <li><a href="/categories/gitblog" class="">Git Blog (with Jekyll) ({{category[1].size}})</a></li>
-              {% endif %}
-            {% endfor %}
-          </ul>
+      <span class="nav__sub-title">Electric license</span>
+        <ul>
+          {% for category in site.categories %}
+            {% if category[0] == "Electric_license" %}
+              <li><a href="/categories/Electric_license" class="">Study ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+
+      <span class="nav__sub-title">etc</span>
+        <ul>
+          {% for category in site.categories %}
+            {% if category[0] == "Network" %}
+              <li><a href="/categories/network" class="">Network ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <ul>
+          {% for category in site.categories %}
+            {% if category[0] == "Gitblog" %}
+              <li><a href="/categories/gitblog" class="">Git Blog (with Jekyll) ({{category[1].size}})</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
       </li>
+
       <li>
         <br>
         <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fdltjrals2.github.io&count_bg=%23FFCC35&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Visitors&edge_flat=false"/>
