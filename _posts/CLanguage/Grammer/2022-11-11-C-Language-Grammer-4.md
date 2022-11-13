@@ -31,20 +31,6 @@ int nums[3] = {0, 1, 2}; // O : Initialization
 nums[3] = {10, 11, 12}; // X : Error, Unexpected behavior
 ```
 
-초기화 할 때만 나열한 된 값을 배열에 할당할 수 있다. 그 외에는 불가능 하다.  
-
-<iframe src="https://tech.io/snippet-widget/crC2AYN" width="100%" frameborder="0" scrolling="no" allowtransparency="true" style="visibility:hidden">
-</iframe>
-<script>if(void 0===window.techioScriptInjected){window.techioScriptInjected=!0;var script=document.createElement("script");script.src="https://files.codingame.com/codingame/iframe-v-1-4.js",(document.head||document.body).appendChild(script)}</script>  
-
-실행 결과를 확인하면 세 가지 경우에 대해 주소의 값이 같은 것을 확인할 수 있다.  
-
-<iframe src="https://tech.io/snippet-widget/WXgV4E3" width="100%" frameborder="0" scrolling="no" allowtransparency="true" style="visibility:hidden">
-</iframe>
-<script>if(void 0===window.techioScriptInjected){window.techioScriptInjected=!0;var script=document.createElement("script");script.src="https://files.codingame.com/codingame/iframe-v-1-4.js",(document.head||document.body).appendChild(script)}</script>  
-
-실행 결과를 확인해보면 4byte 씩 차이가 나는 것을 확인할 수 있다.  
-
 ### 10.3 포인터의 산술 연산  
 
 ### 10.4 포인터와 배열  
