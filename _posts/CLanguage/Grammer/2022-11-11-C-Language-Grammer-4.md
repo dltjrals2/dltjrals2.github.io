@@ -12,7 +12,7 @@ toc:  true
 toc_sticky: true
 
 date: 2022-11-11
-last_modified_at: 2022-11-17
+last_modified_at: 2022-11-18
 ---
 
 ## 10. 배열과 포인터
@@ -620,7 +620,116 @@ for(int j = 0 ; j < 2 ; ++j)
     }
     printf("\n");
 }
-```
+```  
+
+이 때, p_arr 배열은 주소값을 여러개 가진다. p_arr[] = { arr1의 주소, arr2의 주소 } 이다.  
+
+따라서 p_arr + j 는 단순히 p_arr[0]에서 + j index에 있는 값을 뜻한다. 여기서 dereference를 하면 해당 주소값으로 이동한다.  
+
+arr1의 주소값으로 이동하면 arr1 배열에 있는 첫 인덱스 arr1[0]을 가리고 있을 것이다.  
+
+`*((p_arr + j)[i]) vs (*(p_arr + j))[i]`  
+
+`*(p_arr + j)[i]`와 `(*(p_arr + j))[i]`는 다르다. * 보다 [Index]가 우선순위이다. 연산자를 사용하기 전에 ()를 사용하느냐의 차이가 다른 결과값을 출력한다.  
+
+```cpp
+printf("%d ", *((p_arr + 0)[1]);
+printf("%p \n", (p_arr + 0)[1]);
+
+printf("%d ", (*(p_arr + 0))[1]);
+printf("%p \n", &(*(p_arr + 0))[1]);
+```  
+
+> 13 005CF780  
+> 11 005CF754  
+
+`*((p_arr + 0)[1]) 해석`  
+
+p_arr + 0은 p_arr 배열의 첫 값 p_arr[0]을 가리킨다. 이 때 [1]은 단순희 자료형의 크기만큼 주소를 이동하므로 p_arr + 0 = p_arr[0]  
+
+(p_arr[0])[1] = p_arr[1] = &arr2 = arr2[0] = 13 이 된다.  
+
+`(*(p_arr + 0))[1] 해석`  
+
+*(p_arr + 0)은 p_arr[0] = &arr1  
+
+*(p_arr[0]) = arr1  
+
+(arr1[1]) = 11  
+
+포인터는 주소 값을 가지고 자기 자신의 주소값도 등록되어 있다.  
+
+배열은 지정한 자료형의 값을 가지나 자기 자신의 주소는 배열의 첫 값이다.  
+
+```cpp
+int *ptr = arr1;
+printf("%p \n", &ptr); // 010FF9D0  ptr's 의 Address
+printf("%p \n", ptr); // 010FF9A0 ptr's value
+printf("%p \n", arr1); // 010FF9A0 arr1's Address
+printf("%p \n", &arr1[0]); // 010FF9A0 arr1's 1st element's Address
+```  
+
+`String 예제`  
+
+```cpp
+#include <stdio.h>
+
+int main()
+{
+    char* nameA[] = { "Aladdin", "Jasmine", "Magic Carpet", "Genie" };
+    const int nA = sizeof(nameA) / sizeof(char*);
+
+    for (int i = 0; i < nA; ++i)
+        printf("%12s %p\n", nameA[i], &nameA[i]);
+    printf("\n");
+
+
+    char nameB[][16] = { "Aladdin", "Jasmine", "Magic Carpet", "Genie" };
+    const int nB = sizeof(nameB) / sizeof(char[16]);
+
+    for (int i = 0; i < nB; ++i)
+        printf("%12s %p\n", nameB[i], &nameB[i]);
+    printf("\n");
+}
+```  
+
+> Aladdin 012FF878  
+> Jasmine 012FF87C  
+> Magic Carpet 012FF880  
+> Genie 012FF884  
+> Aladdin 012FF888  
+> Jasmine 012FF898  
+> Magic Carpet 012FF8A8  
+> Genie 012FF8B8  
+
+포인터 배열은 배열의 각 값간 주소 차이가 포인터의 사이즈(4byte - 32bit, 8byte - 64bit)이다.  
+
+이중 배열에서 바깥 배열의 원소를 생각해보자.  
+
+각 원소는 안쪽 배열 크기(위 예제에서 sizeof(char) * 16) 만큼 떨어져있다.  
+
+아래 예제는 32bit 환경에서 실핼되었다.  
+
+`nameA의 Memory 사용`  
+ㅣ
+nameA는 포인터의 배열이다. 각 값(원소)는 수고값(포인터)이며 각 값은 포인터 크기(4byte)만큼 떨어져 있다.  
+
+해당 주소값에 가면 character 배열 값을 얻을 수 있다.  
+
+> Charater // 포인터 주소 // 값  
+> Aladdin(8) // 012FF878 // 0x00372100 (8byte)  
+> Jasmine(8) // 012FF87C // 0x00372108 (8byte)  
+> Magic Carpet(c) // 012FF880 // 0x00372110 (16byte-padding)  
+> Genie(6) // 012FF884 // 0x00372120  
+
+`nameB의 Memory 사용`  
+
+nameB는 2차원 배열이다. nameA는 주소 값(포인터)만 배열 내부에 저장 되어 있고, 값은 외부에 있는 주소로 갔을 때 얻을 수 있었다.  
+
+nameB 2차원 배열로 모든 값이 내부에 저장되어 있다.  
+
+![TBC](https://user-images.githubusercontent.com/37467408/202493128-45b720a6-b8ca-4a4e-877b-ac396320feac.PNG)  
+
 
 ### 10.14 2차원 배열과 포인터  
 
