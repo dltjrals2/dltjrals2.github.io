@@ -730,17 +730,320 @@ nameB 2차원 배열로 모든 값이 내부에 저장되어 있다.
 
 ![TBC](https://user-images.githubusercontent.com/37467408/202493128-45b720a6-b8ca-4a4e-877b-ac396320feac.PNG)  
 
+#### 10.13 - 1 배열의 이름과 배열의 주소  
+
+```cpp
+char array[16];
+
+printf("array %p\t%zd\n", array, sizeof(array));
+printf("array + 1 %p\n", array + 1); // Move datatype size
+
+printf("&array %p\t%zd\n", &array, sizeof(&array));
+printf("&array + 1 %p\n", &array + 1); // Move entire size of entry
+```
+
+> Output  
+> array    00F3F994    16  
+> array + 1    00F3995    // 95 - 94 = 0x01 size of element(char)
+> &array    00F3F994    4  
+> &array + 1    00F3F9A4    / A4 - 94 = 0x10 size of array  
+
+배열의 이름은 배열이 가지고 있는 첫 값을 가리킨다.  
+
+& 연산자를 사용한 배열은 배열 전체를 가리키고 있다. 주소에서 +1 연산의 의미는 해당 자료형만큼의 이동을 의미한다.  
+
+array는 첫 값의 자료형만큼 이동하고 &array는 배열의 크기만큼 이동함을 확인할 수 있다.  
+
+#### 10.13 - 2 배열의 타입  
+
+```cpp
+int a[5]; // type of a = int []
+&a;       // type of &a = (int*)[5]
+```
 
 ### 10.14 2차원 배열과 포인터  
 
+![TBC](https://user-images.githubusercontent.com/37467408/202587275-af8cd0f4-e8b5-4b44-8f93-46903b36fbb6.PNG)  
+
+arr[0] 주소와 &arr[0] 주소는 동일하다.  
+
+배열은 자기 자신의 주소를 별도로 보관하지 않기 때문이다. 만약 arr 포인터의 배열이었다면 arr[0]. &arr[0]는 달라진다.  
+
+<iframe src="https://tech.io/snippet-widget/xUoY124" width="100%" frameborder="0" scrolling="no" allowtransparency="true" style="visibility:hidden">
+</iframe>
+<script>if(void 0===window.techioScriptInjected){window.techioScriptInjected=!0;var script=document.createElement("script");script.src="https://files.codingame.com/codingame/iframe-v-1-4.js",(document.head||document.body).appendChild(script)}</script>  
+
+`예제`  
+
+pa는 포인터로 (double 4개를 가지는 배열)을 가리킨다. 주소 연산 pa + 1은 배열 사이즈(32byte)만큼 이동한다.  
+
+ap는 배열로 ptr를 2개를 가지고 있다. 주소연산 ap + 1은 포인터 크기(4byte)만큼 이동한다.  
+
+```cpp
+float arr2d[2][4] = { {1.0f, 2.0f, 3.0f, 4.0f}, {5.0f, 6.0f, 7.0f, 8.0f} };
+
+float (*pa)[4]; // 4개의 Float형 변수를 가지고 있는 배열에 대한 포인터 1개
+float *ap[2]; // 원소가 2개인 포인터의 배열
+
+printf("%zu\n", sizeof(pa)); // size = 4byte > 포인터가 1개
+printf("%zu\n", sizeof(ap)); // size = 8byte > 포인터가 2개
+
+pa = arr2d;
+pa[0] = arr2d[0]; // Error : 포인터가 1개이기 때문에
+pa[1] = arr2d[1]; // Error : 배열처럼 쓸 수 없다.
+
+ap = arr2d; // Error : 포인터의 배열이기 때문에 에러
+ap[0] = arr2d[0];
+ar[1] = arr2d[1];
+```  
+
+`연습하기`  
+
+```cpp
+char arr[2][3] = { { 'a', 'b', 'c' }, { 'd', 'e', 'f' } };
+
+printf("arr        %p %zd \n", arr,        sizeof(arr)        );
+printf("arr[0]     %p %zd \n", arr[0],     sizeof(arr[0])     );
+printf("&arr[0]    %p %zd \n", &arr[0],    sizeof(&arr[0])    );
+printf("&arr[0][0] %p %zd \n", &arr[0][0], sizeof(&arr[0][0]) );
+```
+
+> Output  
+> arr 008FFBF0 6 // size of entire array  
+> arr[0] 008FFBF0 3 // size of char[3] array  
+> &arr[0] 008FFBF0 4 // & + Elem : Pointer  
+> &arr[0][0] 008FFBF0  4 // & + Elem : Pointer  
+>   
+> arr + 1 008FFBF3 4 // Move 3byte  
+> arr[0] + 1 008FFBF1 4 // Move 1byte  
+> &arr[0] + 1 008FFBF3 4 // Move 3byte  
+> &arr[0][0] + 1 008FFBF1 4 // Move 1byte  
+
+`정리`  
+
+포인터는 자기 자신이 차지하고 있는 저장공간을 가지고 있다. 이 주소는 Identifier(식별자 or 변수명)으로 접근한다.  
+
+이 저장공간 안에 다른 값의 저장공간을 가리키는 주소값을 담는다.  
+
+배열은 첫 값의 주소를 자기 자신의 주소값으로 가질 뿐이다. 포인터식으로 이야기하면 자기 자신의 주소와 값이 동일하다. 신기한 점은 배열에서 & 연산자와 sizeof 연산자를 사용해보면 & Array와 Array는 다른 결과값을 출력한다.  
+
+1. sizeof(array)는 배열 전체 공간을 출력하고, sizeof(&array)는 포인터가 차지하는 공간을 출력한다.  
+2. array + 1은 배열 첫 값의 공간만큼 이동하고, &array + 1은 배열 전체 공간만큼 이동한다.  
+
+배열을 어떻게 사용하는지를 기준으로 결과값을 예상해보면 될 것 같다. Array + i 형태는 Index로 쓰이므로 배열 첫 값의 공간만큼 이동하고, sizeof(array)는 배열의 크기를 확인하는 것이다.  
+
+`Bracket[]이 Asterisk * 보다 우선순위가 높다`  
+
+때문에 아래 두 선언은 다른 자료형을 가진다. 먼저 실행되는 연산자를 기준으로 해당 값의 자료형이 출력된다.  
+
+```cpp
+char (*t1)[2]; // char[2]에 대한 포인터 1개
+char *t2[2]; // 원소가 2개인 포인터 배열
+```  
+
 ### 10.15 포인터의 호환성  
+
+```cpp
+/* Promotion */
+int i = 5;
+double d;
+d = i;
+
+/* Imcompatible (int*) -> (double*) */
+int* ptr_i = &i;
+double* ptr_d = &d;
+ptr_d = ptr_i // Warning : Imcompatible
+ptr_d = (double*)ptr_i; // OK. but not recommended
+
+/* ptr to array[n] */
+char (*ptr_arr)[3]; pointer to char[3]
+char arr1[2][3];
+char arr2[3][2];
+
+ptr_arr = arr1; // OK
+ptr_arr = arr2; // Warning
+
+/* Double Pointer */
+char *ptr_c;
+char **d_ptr = &ptr_c;
+*d_ptr = arr2[0]; // ptr to char[]
+d_ptr = arr[2]; // warning
+                // d_ptr (char**) : a ptr to ptr to char
+                // arr2 char(*)[2] : a ptr to array of 2 elem
+```  
+
+`상수 Keyword const 활용`  
+
+오른쪽에서 왼쪽으로 읽는다.  
+
+```cpp
+int * ptr; // ptr is a pointer to int
+const int * const ptr; // ptr is constant pointer to const int
+const int * ptr; // ptr is pointer to int const
+int * const ptr; // ptr is const pointer to int
+```  
+
+`예제`  
+```cpp
+/* const keyword */
+int x = 20;
+const int const y = 20;
+
+int *p1 = &x;
+const int *p2 = &y;
+
+p1 = p2;
+*p1 = -1;
+//*p2 = 50; // Error!
+
+printf("*p1 : %i, *p2 : %i \n", *p1, *p2);
+```  
+
+> Output  
+> *p1 : -1, *p2 : -1  
+
+`값을 const로 지정하기`  
+
+```cpp
+/* const keyword */
+int x = 20;
+const int y = -20;
+    
+int *p1 = &x;
+const int *p2 = &y; 
+
+p2 = p1;              // You can change address
+*p2 = -23;          // Error! Can't change value
+```  
+
+`const ptr`  
+
+```cpp
+/* const keyword */
+int x = 20;
+const int y = -20; // y value is constant
+    
+int *p1 = &x;
+int* const p2 = &y; 
+
+*p2 = 124;             // Can change value
+p2 = p1;              // Error!
+```  
+
+`ptr to ptr to const value`  
+
+```cpp
+int  z = 1;
+int* p3 = &z;
+const int** d_ptr = &p3; // same as below
+d_ptr = &p3;            // OK 
+*d_ptr = p3;           // OK
+**d_ptr = 2;          // Error!
+```  
+
+`ptr to const ptr to const value`  
+
+```cpp
+const int* const* d_ptr = &p3; // same as below
+d_ptr = &p3;                  // OK
+*d_ptr = p3;                 // Error!
+```  
+
+`const ptr to ptr to const value`  
+
+```cpp
+const int** const d_ptr = &p3; // same as below
+*d_ptr = p3;                  // OK
+d_ptr = &p3;                 // Error!
+```
 
 ### 10.16 다차원 배열을 함수에게 전달해주는 방법  
 
+```cpp
+/* int data[ROWS][COLS] = { { 0, 1, 2}, { 3, 4, 5 } }; */
+
+// sum2d(data, 2);
+
+int sum2d(int arr[][COLS], int row)
+{
+    int total = 0;
+    for(int r = 0 ; r < row ; ++r)
+        for(int c = 0 ; c < COLS ; ++c)
+            total += arr[r][c];
+    return total;
+}
+
+int sum2d(int (*arr)[COLS], int row)
+{
+    int total = 0;
+    for(int r=0; r< row; ++r)
+        for(int c=0; c<COLS; ++c)
+            total += arr[r][c];
+    return total;
+}
+```  
+
+고차원 배열을 사용할 떄 첫 []는 입력해둬도 컴파일러가 기억하지 않는다.  
+
+아래 함수는 모두 동일하다.  
+
+```cpp
+int funct(int arr[2][3][4][5], int row);
+int funct(int arr[][3][4][5], int row);
+int funct(int (*arr)[3][4][5], int row);
+```  
+
 ### 10.17 변수로 길이를 정할 수 있는 배열  
+
+`Variable-Length Arrays(VLAs)`  
+
+Visual Studio에서는 지원하지 않는다.  
+
+```cpp
+int main()
+{
+    int n;
+    scanf("%i", &n);
+    
+    int arr[n];
+    for(int i=0; i<n; ++i)
+        arr[i] = 10+i;
+        
+    for(int i=0; i<n; ++i)
+        printf("%d ", arr[i]);
+}
+```  
+
+배열의 길이가 정해진 이후에는 변경이 불가능하다.  
+
+`함수에서 VLAs 활용`  
+
+```cpp
+int sum2d(int row, int col, int arr[row][col]);
+```
+
+함수의 Parameter에서 VLAs를 사용할 수 있다.  
 
 ### 10.18 복합 리터럴과 배열  
 
+같은 자료형끼리 묶은 배열 Literal은 함수의 Argument 사용에 용의하다.  
+
+포인터에도 복합 리터럴을 바로 할당할 수 있다.  
+
+```cpp
+int b[2] = {1, 2};
+(int[2]) {1, 2}; // Compound Literal
+
+int c[2] = (int[2]) {1, 2}; // Error!
+
+int *ptr;
+ptr = (int[2]){1, 2};
+
+int (*ptr)[COLS];
+ptr2 = (int[2][COLS]){ {1, 2, ,3}, {4, 5, 6} };
+```
+
+이름 없이 자료를 활용할 수 있다.
 
 **🐢 현재 공부하고 있는 홍정모의 따라하며 배우는 C언어 를 학습하며 기록 및 정리하는 포스팅입니다. 🐢**
 {: .notice--primary}   
