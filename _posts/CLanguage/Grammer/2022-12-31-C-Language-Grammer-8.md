@@ -12,7 +12,7 @@ toc:  true
 toc_sticky: true
 
 date: 2022-12-31
-last_modified_at: 2023-01-01
+last_modified_at: 2023-01-03
 ---
 
 ## 13. 파일 입출력  
