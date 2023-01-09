@@ -12,7 +12,7 @@ toc:  true
 toc_sticky: true
 
 date: 2023-01-04
-last_modified_at: 2023-01-05
+last_modified_at: 2023-01-09
 ---
 
 ## 14. 구조체  
@@ -564,15 +564,571 @@ int main()
 
 ### 14.7 구조체를 함수로 전달하는 방법  
 
+```cpp
+#define LEN 50
+
+struct fortune
+{
+    char back_name[LEN];
+    double bank_saving;
+    char fund_name[LEN];
+    double fund_invest;
+};
+
+double sum(const struct fortune *my_fortune); // <- double sum(double*, double*)
+
+int main()
+{
+    struct fortune my_fortune =
+    {
+        .bank_name = "Wells-Fargo",
+        .bank_saving = 4032.273,
+        .fund_name = "JPMorgan Chase",
+        .fund_invest = 8543.946
+    };
+    
+    printf("Total : $%.2f\n", sum(&my_fortune));
+    // printf("Total : $%.2f\n", sum(&my_fourtune.bank_saving, &my_fortune.fund_invest));
+    return 0;
+}
+
+double sum(const struct fortune *my_fortune)
+{
+    // return (*my_fortune).bank_saving + (*my_fortune).fund_invest;
+    return my_fortune->bank_saving + my_fortune->fund_invest;
+}
+```  
+
+함수 파라미터가 call by value일 때 문제점  
+1. 메모리 낭비(같은 변수 값이 복사된다. 크기가 거대하면 연산이 느리다.)  
+2. 동적할당된 변수는 복사되지 않고 주소값을 그대로 가져옴  
+
+따라서 pointer를 사용해서 주소 값을 전달하자.  
+
 ### 14.8 구조체와 함수 연습문제  
+
+> 객체지향 프로젝트의 Object = 구조체(다른 타입의 변수들) + 구조체 멤버 변수를 사용하는 함수  
+
+`포인터를 활용하여 이름 입출력하기`  
+
+```cpp
+#define LEN 30
+
+typedef struct
+{
+    char first[LEN];
+    char last[LEN];
+    int num;
+}Name_count;
+
+void receive_input(Name_count*);
+void count_characters(Name_count*);
+void show_result(const Name_count*);
+char* s_gets(char* st, int n);
+
+int main()
+{
+    Name_count user_name;
+    receive_input(&user_name);
+    count_characters(&user_name);
+    
+    show result(&user_name); // no needs to type const
+    
+    return 0;
+}
+
+/*
+void receive_input(Name_count* user)
+{
+    printf("Insert your first name!\n>>");
+    s_gets(user->first, LEN);
+    
+    printf("Insert your last name!\n>>");
+    s_gets(user->last, LEN);
+}
+*/
+
+void receive_input(Name_count* user)
+{
+    int flag;
+    printf("Input your first name \n>>");
+    flag = scanf("%s", user->first); // %[^\n] means read str
+    
+    // flag = scanf("%[^\n]%*c", user->first); // %[^\n] means read str
+    if(flag != 1)                              // until reached to \n
+        printf("Wrong input");                 // %*c means delete thie on buffer
+        
+    printf("Input your last name \n>>");
+    flag = scanf("%s", user->last);
+    // flag = scanf("%[^\n]%*c", user_last);
+    if(flag != 1)
+        printf("Wrong input");
+}
+
+/*
+void count_characters(Name_count* user)
+{
+    int count = 0;
+    char* ptr = user->first;
+    while(*ptr != '\0')
+    {
+        count++;
+        ptr++;
+    }
+    ptr = user->last;
+    while(*ptr != '\0')
+    {
+        count++;
+        ptr++;
+    }
+    user->num = count;
+}
+*/
+
+void char_characters(Name_count* user)
+{
+    user->num = strlen(user->first) + strlen(user->last);
+}
+
+void show_result(const Name_count* user)
+{
+    printf("Your name is %s %s has %i characters\n", user->last, user->first, user->num);
+}
+
+/*
+char* s_gets(char* st, int n)
+{
+    char* start = st;
+    char ch;
+    while((ch = fgetc(stdin) != 0 && ch != '\n'))
+    {
+        *st = ch;
+        st++;
+    }
+    *st = '\0';
+    return start;
+}
+*/
+
+char* s_gets(char* str, int n)
+{
+    char* start = str;
+    char* ptr = NULL;
+    
+    fgets(str, LEN, stdin);
+    if(start != NULL)
+    {
+        ptr = strchr(start, '\n');
+        if(ptr)
+            *ptr = '\0';
+        else
+        {
+            while(getc(stdin) != '\n')
+                continue;
+        }
+    }
+}
+```  
+
+`대입연산자를 활용하여 이름 입출력하기`  
+strcpy를 사용하지 않고 대입 연산자로 해당 값을 바꾸어줄수 있다. 새로운 구조체 변수를 만들어 대입해주면 된다.  
+
+```cpp
+#define LEN 30
+
+typedef struct
+{
+    char first[LEN];
+    char last[LEN];
+    int num;
+}Name_count;
+
+Name_count receive_input();
+Name_count count_characters(Name_count);
+void show_result(const Name_count);
+char* s_gets(char* st, int n);
+
+int main()
+{
+    Name_count user_name;
+    
+    user_name = receive_input;
+    
+    user_name = count_characters(user_name);
+    
+    show_result(user_name); // no needs to type const
+    
+    return 0;
+}
+
+Name_count receive_input()
+{
+    char* ptr = NULL;
+    Name_count user;
+    
+    printf("Input your last name\n>>");
+    s_gets(user.last, LEN);
+    
+    printf("Input your first name\n>>");
+    s_gets(user.first, LEN);
+    
+    return user;
+}
+
+Name_count count_characters(Name_count user)
+{
+    user.num = strlen(user.first) + strlen(user.last);
+    printf("\n num : %i \n", user.num);
+    return user;
+}
+
+void show_result(const Name_count user)
+{
+    printf("your name is %s %s has %i characters\n", user.last, user.first, user.num);
+}
+
+char* s_gets(char* st, int n)
+{
+    char* start = st;
+    char ch;
+    while((ch = fgetc(stdin)) != 0 && ch = '\n');
+    {
+        *st = ch;
+        st++;
+    }
+    *st = '\0';
+    return start;
+}
+```  
+
+`scanf() 함수에서 사용하는 format specifier`  
+%[^\n]%*c 가 나올때까지 문자를 읽는다. 이 때 \n은 buffer에 남아있다. 이를 지워주기 위하여 %*c를 사용하자.  
+다음 코드는 &*c와 있을 때와 없을 때를 비교하는 코드이다.  
+
+```cpp
+char test[10];
+// int flag = scanf("%[^\n]%*c", test); // use %c for deleting buffer
+int flag = scanf("%[^\n]", test);
+
+for(int i = 0 ; i < 10 ; ++i)
+{
+    printf("%3i #c \n", (int)test[i], test[i]);
+}
+
+char ch;
+
+while((ch = getc(stdin)) != NULL)
+{
+    printf("omitting %c\n", ch);
+    continue;
+}
+```  
 
 ### 14.9 구조체와 할당 메모리  
 
+`동적 할당의 잘못된 예`  
+frame과 lname이 Text Segment에 저장되어있다. scanf 함수로 해당 주소에 있는 값을 바꾸려고 하면 에러가 발생한다.  
+
+```cpp
+struct namect {
+    char* fname; // use malloc()
+    char* lname; // use malloc()
+    int letters;
+};
+
+struct namect p = { "John", "King" };
+printf("%s %s\n", p.fname, p.lname);
+
+int flag = scanf("%[^\n]%*c", p.lname);
+printf("%s %s\n", p.fname, p.lname);
+```  
+
+`동적 할당의 적절한 예`  
+buffer를 만들어 활용하면 동적 할당을 사용할 수 있다.  
+
+```cpp
+char buffer[LEN] = { 0, };
+int flag = scanf("%[^\n]%*c", buffer);
+p.fname = (char*)malloc(sizeof(buffer) + 1);
+
+int(p.fname != NULL)
+    strcpy(p.fname, buffer);
+printf("%s %s\n", p.fname, p.lname);
+```  
+
+`동적할당으로 이름 입출력하기`  
+1. bufferㅇ에 입력값을 저장한 후, 메모리를 할당한다.
+2. 해당 메모리에 strcpy() 함수를 사용하여 값을 복사하여 넣는다.  
+
+```cpp
+#define LEN 30
+
+struct namect {
+    char* fname; // use malloc()
+    char* lname; // use malloc()
+    int letters;
+};
+
+void getinfo(struct namect*);         // allocate memory
+void makeinfo(struct namect*);
+void showinfo(const struct namect*);
+void cleanup(struct namect*);         // free memory when done
+
+int main()
+{
+    struct namect temp = { NULL, NULL, 0 };
+    struct namect* user = &temp;
+    getinfo(user);
+    makeinfo(user);
+    showinfo(user);
+    cleanup(user);
+}
+
+void getinfo(struct namect* user)
+{
+    printf("Input your first name\n>>");
+    
+    char buffer[LEN] = { 0, };
+    int flag = scanf("%[^\n]%*c", buffer);
+    if(flag != 1) { // flag is counting how many input is there.
+        printf("Bad input!\n");
+        exit(1);
+    }
+    
+    user->fname = (char*)malloc(strlen(buffer) + 1); // add 1 for '\0'
+    if(user->fname == NULL) // sizeof char = 0
+    {
+        printf("Impossible to allocate memory!");
+        exit(1);
+    }
+    strcpy(user->fname, buffer);
+    
+    printf("Input your last name\n>>");
+    flag = scanf("%[^\n]%*c", buffer);
+    user->lname = (char*)malloc(strlen(buffer) + 1);
+    if(!user->lname)
+    {
+        printf("Impossible to allocate memory!");
+        exit(1);
+    }
+    strcpy(user->lname, buffer);
+}
+
+void makeinfo(struct namect* user)
+{
+    user->letters = strlen(user->fname) + strlen(user->lname);
+}
+
+void showinfo(struct namect* user)
+{
+    printf("Your name is %s %s has %i characters\n", user->fname, user->lname, user->letters);
+}
+
+void cleanup(struct namect* user)
+{
+    free(user->fname);
+    free(user->lname);
+    printf("cleaned up memory!\n");
+}
+```
+
 ### 14.10 복합 리터럴  
+
+한 번 초기화 한 구조체는 변수를 한꺼번에 바꿀 수 없다. 초기화할 때 처럼 assignment operator = { .. }가 불가능하다.  
+
+이 때 여러 리터럴 자료형을 합친 복합 리터럴을 사용하여 임시 구조체를 만든 후, 초기화된 구조체에 값을 할당할 수 있다.  
+
+```cpp
+struct rectangle
+{
+    int width;
+    int height;
+};
+
+int rect_area_callbyval(struct rectangle r)
+{
+    return r.width * r.height;
+}
+
+int rect_area_callbyref(struct rectangle* r)
+{
+    return r->width * r->height;
+}
+
+int main()
+{
+    /* Bad usage */
+    struct rectangle rectangel1 = { 3, 3 };
+    // rectange1 = { 5, 5 }; // Error! Only possible in initialization
+    
+    /* Assign value on each member variable */
+    rectangle1.width = 5;
+    rectangle1.height = 5;
+    
+    /* Use Assignment Operator */
+    struct rectangle temp_r = { 10, 10 };
+    rectangle1 = temp_r;
+    rectangle1 = (struct rectangle){ 15, 15 };
+    
+    /* Use temporary struct vairable on argument */
+    rect_area_callbyval((struct rectangle) { 20, 20 });
+    rect_area_callbyref(&(struct rectangle) { .height = 25, .width = 25 });
+}
+```  
 
 ### 14.11 신축성있는 배열 멤버  
 
+구조체 내에 정의되는 배열을 동적으로 사용할 수 있다. 포인터가 아니다 배열의 공간을 동적으로 할당할 수 있다.  
+
+이 때 배열인 멤버변수는 반드시 마지막 순서에 선언되어라. 구조체 크기를 할당받을 때 배열의 크기를 고려하여 더해주면 된다.  
+
+`동적할당 포인터 vs 배열`  
+
+1. flexible array는 배열이기 때문에 포인터와 다르다. 자기 자신이 별도의 저장공간을 가지는 포인터와 달리 배열의 식별자가 가리키는 주소는 배열 첫 값이다. 때문에 메모리를 아낄 수 있다. `포인터 메모리(4byte)를 아낄 수 있다.` 아래 코드에서 struct 내부에서 flex values의 sizeof를 확인해보면 0byte임을 확인할 수 있다.  
+2. 동적할당된 메모리는 힙에서 어느 위치에 저장되었는지 알 수 없다. 배열은 이전 멤버변수에 이어진 주소값을 가진다. (구조체와 일 열로 나열된 메모리 주소를 가진다.)  
+
+```cpp
+struct flex
+{
+    size_t count;
+    double average;
+    double values[]; // flexible array should be laast member variable
+};
+
+/*
+struct flex
+{
+    size_t count;
+    double average;
+    double* values; // Dynamic allocation, pointer has own's data
+};
+*/
+
+const size_t n = 3;
+struct flex* s_ptr = (struct flex*)malloc(sizeof(struct flex) + n * sizeof(double));
+if(s_ptr == NULL)
+    exit(1);
+
+s_ptr->count = n;
+for(size_t i = 0 ; i < s_ptr->count; ++i)
+    s_ptr->values[i] = 1.1 * i;
+    
+s_ptr->average = 0.0;
+for(unsigned i = 0 ; i < s_ptr->count ; ++i)
+    s_ptr->average += s_ptr->values[i];
+s_ptr->average /= (double)s_ptr->count;
+
+printf("Flexible Array member \n");
+printf("Sizeof struct flex  %zd\n", sizeof(struct flex));
+printf("Sizeof *s_ptr       %zd\n", sizeof(*s_ptr));
+printf("Sizeof malloc       %zd\n", sizeof(struct flex) + n * sizeof(double));
+
+printf("struct ptr      add %p\n", s_ptr);
+printf("     count      add %p\n", &s_ptr->count);
+printf("     count     size %zd\n",sizeof(s_ptr->count));
+printf("s_ptr->average  add %p\n", &s_ptr->average);
+printf("s_ptr->values   add %p\n", &s_ptr->values);
+printf("s_ptr->values   val %p\n", s_ptr->values);
+printf("s_ptr->values  size %zd\n", sizeof(s_ptr->values));
+```  
+
+> Output  
+Flexible Array member  
+Sizeof struct flex  16  
+Sizeof *s_ptr       16  
+Sizeof malloc       40  
+struct ptr      add 00E64D40  
+     count      add 00E64D40  
+     count     size 4  
+s_ptr->average  add 00E64D48  
+s_ptr->values   add 00E64D50  
+s_ptr->values   val 00E64D50  
+s_ptr->values  size 0  
+
+1. size_t count와 double average의 주소값 차이는 8이다. size_t의 크기는 4이다. padding이 되었음을 확인할 수 있다.  
+2. struct와 *s_ptr의 sizeof는 모두 16이다. 배열까지 합치면 40byte이어야 한다. 구조체 크기에 배열 값이 포함되지 않았음을 확인할 수 있다. 동적할당을 받았기 때문에 컴파일러는 배열의 크기를 알 수 없다. 이 때문에 포인터를 dereference 후 대입연산자를 사용하여 16byte만 복사하여 할당한다. memcpy() 함수를 사용하면 모두 복사할 수 있다.  
+
+`다음 코드를 실행하면 new_ptr에 있는 배열에 쓰레기값이 들어있음을 확인할 수 있다.`  
+
+```cpp
+struct flex* new_ptr = (struct flex*)malloc(sizeof(struct flex) + n * sizeof(double));
+if(new_ptr == NULL)
+    exit(1);
+
+*new_ptr = *s_ptr;
+
+for(size_t i = 0 ; i < s_ptr->count ; ++i)
+    printf("%f ", s_ptr->values[i]);
+printf("\n");
+
+for(size_t i = 0 ; i < new_ptr->count ; ++i)
+    printf("%f ", new_ptr->values[i]);
+```  
+
+> Output  
+0.000000 1.100000 2.200000  
+-6277438562204192487878988888393020692503707483087375482269988814848.000000 -6277438562204192487878988888393020692503707483087375482269988814848.000000 -6277438562204192487878988888393020692503707483087375482269988814848.000000  
+
+따라서 대입연산자를 활용하기 보다는 memcpy()을 사용해주자.  
+
 ### 14.12 익명 구조체  
+
+`Nested structure의 사용예제`  
+
+```cpp
+struct names // tag is names
+{
+    char first[20];
+    char last[20];
+};
+
+struct person // tag is person
+{
+    int id;
+    struct names name; // nested structure member;
+}
+
+int main()
+{
+    struct person CEO = {
+        .id = 100,
+        .name = { "Bill", "Gates" }
+    };
+    
+    printf("%i\n", CEO.id);
+    puts(CEO.name.first);
+    puts(CEO.name.last);
+}
+```  
+
+`Nested structure를 사용하는 대신 Anonymous(Tempolary) Structure를 사용할 수 있다.`  
+
+`장점`  
+1. Nested Struct를 위해 struct를 따로 정의하지 않는다.  
+2. 멤버 변수를 호출하기 위해 Tag를 한 번만 사용하면 된다.  
+
+```cpp
+struct person_simple // tag is person_simple
+{
+    int id;
+    struct { // anonynous structure
+        char first[20];
+        char last[20];
+    };
+}
+
+int main()
+{
+    struct person_simple CEO = {
+        .id = 111,
+        {"Steve", "Jobs"}
+    };
+    
+    printf("%i\n", CEO.id);
+    puts(CEO.first);
+    puts(CEO.last);
+}
+```
 
 ### 14.13 구조체의 배열을 사용하는 함수  
 
