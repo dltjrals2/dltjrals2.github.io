@@ -1,5 +1,5 @@
 ---
-title: "구조체"
+title: "구조체 - 1"
 
 categories:
   - C_grammer
@@ -12,7 +12,7 @@ toc:  true
 toc_sticky: true
 
 date: 2023-01-04
-last_modified_at: 2023-01-09
+last_modified_at: 2023-01-10
 ---
 
 ## 14. 구조체  
@@ -1132,31 +1132,284 @@ int main()
 
 ### 14.13 구조체의 배열을 사용하는 함수  
 
+`구조체 배열`  
+
+```cpp
+#define LEN 30
+
+struct book
+{
+    char name[LEN];
+    char author[LEN];
+};
+
+void print_books(const struct book books[], int n);
+
+int main()
+{
+    struct book my_books[3]; // = { { "The Great Gatsby", "F. Scott Fitzagrald" }, { ... }, ... };
+    my_books[0] = (struct book){ "The Great Gatsby", "F. Scott Fitzagrald" };
+    my_books[1] = (struct book){ "Hemlet", "William Shakespear" };
+    my_books[2] = (struct book){ "The Odyssey", "Homer" };
+    
+    print_books(my_books, 3);
+    
+    return 0;
+}
+
+void print_books(const struct book books[], int n)
+{
+    for(int i = 0 ; i < n ; ++i)
+        printf("%s written by %s. \n", books[i].name, books[i].author);
+}
+```  
+
+`동적할당을 활용한 구조체 포인터`  
+
+```cpp
+#define LEN 30
+
+struct book
+{
+    char name[LEN];
+    char author[LEN];
+};
+
+void print_books(const struct book *books, int n);
+
+int main()
+{
+    struct book* my_books = (struct book*)malloc(sizeof(struct book) * 3);
+    if(my_books == NULL)
+        exit(1);
+        
+    my_books[0] = (struct book){ "The Great Gatsby", "F. Scott Fitzagrald" };
+    my_books[1] = (strcut book){ "Hamlet", "William Shakespear" };
+    my_books[2] = (struct book){ "The Odyssey", "Homer" };
+    print_books(my_books, 3);
+    
+    return 0;
+}
+
+void print_books(const struct book* books, int n)
+{
+    for(int i = 0 ; i < n ; ++i)
+        printf("%s written by %s.\n", (books + i)->name, (*(books + i)).author); // also books[i]
+}
+```  
+
 ### 14.14 구조체 파일 입출력 연습문제  
 
-### 14.15 공용체의 원리  
+1. text 파일에 책 이름과 저자를 추가해보자. text 파일 끝에 반드시 next line character를 추가해주어야 한다.  
+2. text 파일 입출력을 binary 형식(wb, rb)로 처리하면 빠르다.  
+3. binary 파일을 읽을 수 없기 때문에 디버깅이 어렵다.  
+4. malloc은 컴파일 타임에 크기 변수로 오버플로우 될지 확인할 수 없다. calloc을 사용해주자. 오버플로우 될지 미리 계산한다.  
 
-### 14.16 공용체와 구조체를 함께 사용하기  
+```cpp
+#define LEN 30
 
-### 14.17 익명 공용체  
+struct book
+{
+    char name[LEN];
+    char author[LEN];
+};
 
-### 14.18 열거형  
+void print_books(const struct book *books, int n)
 
-### 14.19 열거형 연습문제  
+void write_books(const char* filename, const struct book *books, int n);
+void read_books_ref(const char* filename, struct book** books_qtr, int *n);
+struct book* read_books_val(const char* filename, int* n);
 
-### 14.20 이름공간 공유하기  
+void write_books_binary(const char* filename, const struct book *books, int n);
+struct book* read_book_binary(const char* filename, int* n);
 
-### 14.21 함수 포인터의 원리  
+int main()
+{
+    int temp;
+    int n = 3;
+    const char* file_n = "books.bat";
+    struct book* my_books = (struct book*)malloc(sizeof(struct book) * n);
+    
+    if(my_books == NULL)
+    {
+        printf("Malloc failed");
+        exit(1);
+    }
+    
+    my_books[0] = (struct book){ "The Great Gatsby", "F. Scott Fitzagrald" };
+    my_books[1] = (strcut book){ "Hamlet", "William Shakespear" };
+    my_books[2] = (struct book){ "The Odyssey", "Homer" };
+    
+    print_books(my_books, n);
+    
+    printf("\n Writing to a file.\n");
+    write_books(file_n, my_books, n);
+    // write_books_binary(file_n, my_books, n);
+    
+    free(my_books);
+    n = 0;
+    printf("Done.\n");
+    
+    printf("\n Press any key to read data from a file.\n\n");
+    temp = getchar(); // waiting
+    
+    my_books = read_books_val(file_n, &n);
+    // read_books_ref(file_n, &my_books, &n);
+    // my_books = read_books_binary(file_n, &n);
+    
+    if(my_books = NULL)
+    {
+        printf("my books has null\n");
+        exit(1);
+    }
+    
+    print_books(my_books, n);
+    free(my_books);
+    n = 0;
+    
+    printf("Finished Successfully\n");
+    return 0;
+}
 
-### 14.22 함수 포인터의 사용 방법  
+void print_books(const struct book *books, int n)
+{
+    for(int i = 0 ; i < n ; ++i)
+        printf("Book %i : %s Written by %s\n", i, (books + i)->name, (*(books + i)).author); // also books[i]
+}
 
-### 14.23 자료형에게 별명을 붙여주는 typedef  
+void write_books(const char* file_name, const struct book* books, int n)
+{
+    FILE* fp = fopen(filename, "w");
+    fprintf(fp, %i\n", n);
+    for(int i = 0 ; i < n ; ++i)
+        fprintf(fp, "%s\n%s\n", books[i].name, books[i].author);
+    fclose(fp);
+}
 
-### 14.24 복잡한 선언을 해석하는 요령  
+struct book* read_books_val(const char* file_name, int* n)
+{
+    /* Using this way */
+    FILE* fp = fopen(filename, "r");
+    
+    int flag = 0;
+    flag = scanf(fp, %i%*c" n); // Asterisk for deleting
+    
+    // struct book* books = (struct book*)malloc(sizeof(struct book) * (*n));
+    struct book* books = (struct book*)calloc(sizeof(struct book), *n);
+    
+    if(books == NULL)
+        exit(1);
+        
+    /* Using fscanf */
+    for(int i = 0 ; i < *n ; ++i)
+    {
+        flag = fscanf(fp, "%[^\n]%*c%[^\n]%*c", books[i].name, books[i].author);
+        if(flag != 2)
+            exit(2);
+    }
+    flose(fp);
+    return books;
+    
+    /* Using fread, Complicated way */
+    unsigned char ch;
+    unsigned char buffer[LEN] = { '\0', };
+    int buffer_count = 0;
+    bool isOn = 1;
+    int count = 0;
+    
+    while( fread(&ch, sizeof(unsigned char), 1, fp) > 0 )
+    {
+        if(ch == '\n')
+        {
+            buffer_count = 0;
+            if(isOn)
+                strcpy(books[count].name, buffer);
+            else
+                strcpy(books[count].author, buffer);
+            
+            isOn = isOn ? 0 : 1;
+            for(int i = 0 ; i < LEN ; ++i)
+                buffer[i] = '\0';
+                
+            if(isOn == 1)
+                count++;
+            continue;
+        }
+        buffer[buffer_count++] = ch;
+    }
+    flose(fp);
+    return books;
+}
 
-### 14.25 qsort() 함수 포인터 연습문제  
+void read_books_ref(const char* filename, strcut book** books_dptr, int* n)
+{
+    FILE* fp = fopen(filename, "r");
+    
+    int flag; // count how many words are read
+    flag = fscanf(fp, "%d%*c", n); // delete last elements of character == '\n'
+    if(flag != 1)
+        exit(1);
+        
+    // malloc can't calculate the size of memeory allocating to
+    // *books_dptr = (struct book*)malloc(sizeof(struct book) * (*n)); // Make Warning
+    *books_dptr = (strcut book*)calloc(sizeof(struct book), *n);
+    if(*books_dptr == NULL)
+        exit(1);
+        
+    /*
+        You can try this on much understandabke way
+        struct book *books = (struct book*)calloc(sizeof(struct book), *n);
+        ...
+        *books_dptr = books;
+    */
+    
+    for(int i = 0 ; i < *n ; ++i)
+    {
+        flag = fscnaf(fp, "%[^\n]%*c%[^\n]%*c", (*books_dptr)[i].name, (*books_dptr)[i].author);
+        if(flag != 2)
+        {
+            printf("Read more than two variable in the books_dptr\n");
+            exit(1);
+        }
+    }
+    flose(fp);
+}
 
-### 14.26 함수 포인터의 배열 연습문제  
+void write_books_binary(const char* filename, const struct book* books, int n)
+{
+    FILE* fp = fopen(filename, "wb");
+    if(fp == NULL)
+    {
+        printf("Can't open file\n");
+        exit(1);
+    }
+    
+    /* Good solution */
+    fwrite(&n, sizeof(n), 1, fp);
+    fwrite(books, sizeof(struct book), n, fp);
+    fclose(fp);
+}
+
+struct book* read_books_binary(const char* filename, int* n)
+{
+    FILE* fp = fopen(filename, "rb");
+    
+    fread(n, sizeof(*n), 1, fp);
+    
+    printf("n = %i\n", *n);
+    struct book* books = (struct book*)malloc(sizeof(struct book) * (*n));
+    
+    if(books == NULL)
+    {
+        printf("Failed to allocated memory in read_books_binary");
+        exit(1);
+    }
+    fread(books, sizeof(struct book), *n, fp);
+    flose(fp);
+    
+    return books;
+}
+```  
 
 **🐢 현재 공부하고 있는 홍정모의 따라하며 배우는 C언어 를 학습하며 기록 및 정리하는 포스팅입니다. 🐢**
 {: .notice--primary}   
