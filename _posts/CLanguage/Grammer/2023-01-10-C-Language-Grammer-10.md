@@ -894,7 +894,7 @@ int (*g(int))(int);
 
 ```cpp
 // An array of functions are impossible
-int a[10)(int) // Error! - Wrong
+int a[10](int) // Error! - Wrong
 
 // But an array of function pointers are possible
 int* (*x2[10])(void)
@@ -912,9 +912,202 @@ FCN_PTR_ARRAY x3;
 
 `추가 예제`  
 
+```cpp
+int board[6][4]; // an array of arrays of int
+int** db_ptr;
+
+int* risk[10]; // array saves 10 in pointer
+int(*risk)[10]; // pointer pointing to array saving 10 int
+
+int* off[3][4]; // 4 x 3 array saves 12 int pointers
+int(*uff)[3][4]; // pointer pointing to 4 * 3 int array
+int(*uof[3])[4]; // array saves 3 pointers pointing to 4 element int array
+```
+
+int(*uof[3])[4]가 해석하기 어렵다. 3개의 int pointer가 4개짜리 배열을 가리키고 있다.  
+
+```cpp
+char* fump(int); // function returning char*
+char (*frump)(int); // function pointer, pointed function retucn char
+char (*flump[3])(int); // array of 3 pointers to functions that return type char
+```  
+
+char (*flump[3])(int)가 해석하기 어렵다. parameter와 반환값은 쉽계 에측이 가능하다. (*flump[3])은 배열 안에 함수 포인터가 3개 있음을 가리킨다.  
+
+```cpp
+typedef int arr[5];
+typedef arr* p_arr;
+typedef p_arr ten_p_arr[10];
+
+arr five_arr;
+p_arr ptr_five_arr;
+ten_p_arr ptr_five_arr_ten_times;
+```  
+
 ### 14.25 qsort() 함수 포인터 연습문제  
 
+`예제를 보고 float 자료형으로 구현해보자`  
+
+```cpp
+#include <stdio.h>
+#include <stdlib.h>
+int compare(const void* first, const void* second)
+{
+    if(*(int*)first > *(int*)second)
+        return 1;
+    else if(*(int*)first < *(int*)second)
+        return -1;
+    else
+        return 0;
+}
+
+int main()
+{
+    int arr[] = { 8, 2, 5, 3, 6, 11 };
+    int n = sizeof(arr) / sizeof(arr[0]);
+    qsort(arr, n, sizeof(int), compare)
+    
+    for(int i = 0 ; i < n ; ++i)
+        printf("%d ", arr[i]);
+}
+```  
+
+`struct 자료형으로 구현하기`  
+
+```cpp
+struct kid
+{
+    char name[10];
+    int height;
+};
+
+// TODO : Try increasing / decreasing order
+int compare_kid(const void* first, const void* second)
+{
+    if(((struct kid*)first->height > ((struct kid*)second)->height)
+        return 1;
+    else if(((struct kid*)first-> height < ((struct kid*)second->height)
+        return -1;
+    else
+        return 0;
+    
+    /*
+        typedef struct kid* kid_ptr;
+        kid_ptr kid_ptr_1 = (kid_ptr)first;
+        kid_ptr kid_ptr_2 = (kid_ptr)second;
+        if(kid_ptr_1->height > kid_ptr_2->height)
+            return 1;
+        else if(kid_ptr_1->height < kid_ptr_2->height)
+            return -1;
+        else
+            return 0;
+    */
+}
+
+int main()
+{
+    struct kid friends[] = { "Jack Jack", 40, "Genie", 300, "Aladdin", 170, "Piona", 150 };
+    // struct kid friends[] = { { "Jack Jack", 40 }, { "Genie", 300 }, { "Aladdin", 170 }, { "Piona", 150 } };
+    
+    const int n = sizeof(friends) / sizeof(struct kid);
+    qsort(friends, n, sizeof(struct kid), compare_kid);
+    for(int i = 0 ; i < n ; ++i)
+        printf("%s  \tis %3i height\n", friends[i].name, friends[i].height);
+}
+```  
+
+구조체 배열을 정의할 때 각 구조체 변수의 값을 직렬로 늘려놓아도 된다.  
+
 ### 14.26 함수 포인터의 배열 연습문제  
+
+```cpp
+void update_string(char* str, int(*pf)(int));
+void ToUpper(char* str);
+void ToLower(char* str);
+void Transpose(char* str);
+
+int main()
+{
+    char option[] = { 'u', 'l' }; // let's add 't'
+    int n = sizeof(option) / sizeof(option[0]);
+    
+    typedef void (*FUNC_TYPE)(char*);
+    FUNC_TYPE operation[] = { ToUpper, ToLower }; // You can add transpose
+    
+    printf("Enter a string\n>> ");
+    char input[100];
+    
+    int scanned;
+    while((scanned = scanf("%[^\n]%*c", input)) != 1)
+        printf("Please try again\n");
+        
+    while(1)
+    {
+        printf("Choose an option:\n");
+        printf("u ) to upper\n");
+        printf("l ) to lower\n");
+        
+        char c;
+        while(scanf("%c%*[^\n]*c", &c) != 1)
+            printf("Please try again\n");
+            
+        bool found = false;
+        for(int i = 0 ; i < n ; ++i)
+        {
+            if(option[i] == c)
+            {
+                (*(operation[i]))(input);
+                found = true;
+                break;
+            }
+        }
+        if(found)
+            break;
+        else
+            printf("Wrong Input, try again\n");
+    }
+    printf("result = %s \n", input);
+}
+
+void update_string(char* str, int(*pf)(int))
+{
+    while(*str)
+    {
+        *str = (*pf)(*str);
+        str++;
+    }
+}
+
+void ToUpper(char* str)
+{
+    while(*str != '\0')
+    {
+        *str = toupper(*str);
+        str++;
+    }
+}
+
+void ToLower(char* str)
+{
+    while(*str != '\0')
+    {
+        *str = tolower(*str);
+        str++;
+    }
+}
+
+void Transpose(char* str)
+{
+    while(*str)
+    {
+        if(islower(*str))
+            *str = toupper(*str);
+        else if(isupper(*str))
+            *str = tolower(*str);
+        str++;
+    }
+}
+```
 
 **🐢 현재 공부하고 있는 홍정모의 따라하며 배우는 C언어 를 학습하며 기록 및 정리하는 포스팅입니다. 🐢**
 {: .notice--primary}   
